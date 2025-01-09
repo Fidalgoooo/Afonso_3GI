@@ -121,7 +121,7 @@ session_start();
     </div>
   </section>
 
-  <!-- Testimonials Section -->
+<!-- Testimonials Section 
   <section class="testimonials" data-aos="fade-up">
     <h2>O que os nossos clientes dizem</h2>
     <div class="testimonial">
@@ -132,44 +132,11 @@ session_start();
       <p>"Recomendo vivamente! Aluguei um carro em Lisboa e foi uma experiência tranquila."</p>
       <h4>- Maria Oliveira</h4>
     </div>
-  </section>
+  </section> -->
 
-  <!-- Footer -->
-  <footer class="footer">
-  <div class="footer-container">
-    <div class="footer-column">
-      <h3>SprintCar</h3>
-      <p>O seu parceiro confiável para o aluguer de carros em Portugal.</p>
-    </div>
-    <div class="footer-column">
-      <h3>Contactos</h3>
-      <p><strong>Endereço:</strong> Avenida Oxford, Cary</p>
-      <p><strong>E-mail:</strong> <a href="mailto:mwiger@yahoo.com">mwiger@yahoo.com</a></p>
-    </div>
-    <div class="footer-column">
-      <h3>Links úteis</h3>
-      <ul>
-        <li><a href="#">Sobre nós</a></li>
-        <li><a href="#">Contacte-nos</a></li>
-        <li><a href="#">Galeria</a></li>
-        <li><a href="#">Blogue</a></li>
-        <li><a href="#">Perguntas Frequentes</a></li>
-      </ul>
-    </div>
-    <div class="footer-column">
-      <h3>Veículos</h3>
-      <ul>
-        <li><a href="#">Sedan</a></li>
-        <li><a href="#">Cabriolet</a></li>
-        <li><a href="#">Pickup</a></li>
-        <li><a href="#">Minivan</a></li>
-        <li><a href="#">SUV</a></li>
-      </ul>
-    </div>
+  <div>
+    <?php include 'footer.php'; ?>
   </div>
-  <div class="footer-bottom">
-    <p>© 2024 SprintCar. Todos os direitos reservados.</>
-  </div>
-</footer>
+
 </body>
 </html>

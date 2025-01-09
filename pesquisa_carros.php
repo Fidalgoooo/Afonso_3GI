@@ -85,5 +85,8 @@ $result = $stmt->get_result();
             <p>Tente alterar as datas ou contacte-nos para obter mais informações.</p>
         <?php endif; ?>
     </div>
+  <div>
+    <?php include 'footer.php'; ?>
+  </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db.php';
+include 'menu.php'; 
 
 // Verifica se o utilizador está autenticado
 if (!isset($_SESSION['user_id'])) {
@@ -124,6 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reserva de Carro</title>
+    <link rel="stylesheet" href="css/reserva.css">
+
 </head>
 <body>
     <div class="container">
@@ -135,24 +138,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if ($etapa === 1): ?>
             <form method="POST">
-                <h3>Dados da Reserva</h3>
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" id="nome" required>
+    <h3>Dados da Reserva</h3>
 
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" required>
+    <!-- Primeira Linha: Nome e Contacto -->
+    <div class="row">
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" required>
+        </div>
 
-                <label for="contacto">Contacto</label>
-                <input type="text" name="contacto" id="contacto" required>
+        <div class="form-group">
+            <label for="contacto">Contacto</label>
+            <input type="text" name="contacto" id="contacto" required>
+        </div>
+    </div>
 
-                <label for="data_inicio">Data de Início</label>
-                <input type="date" name="data_inicio" id="data_inicio" value="<?= htmlspecialchars($_SESSION['data_inicio'] ?? '') ?>" disabled>
+    <!-- Segunda Linha: Email, Data de Início e Data de Fim -->
+    <div class="row">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required>
+        </div>
 
-                <label for="data_fim">Data de Fim</label>
-                <input type="date" name="data_fim" id="data_fim" value="<?= htmlspecialchars($_SESSION['data_fim'] ?? '') ?>" disabled>
+        <div class="form-group">
+            <label for="data_inicio">Data de Início</label>
+            <input type="date" name="data_inicio" id="data_inicio" value="<?= htmlspecialchars($_SESSION['data_inicio'] ?? '') ?>" disabled>
+        </div>
 
-                <button type="submit">Próximo</button>
-            </form>
+        <div class="form-group">
+            <label for="data_fim">Data de Fim</label>
+            <input type="date" name="data_fim" id="data_fim" value="<?= htmlspecialchars($_SESSION['data_fim'] ?? '') ?>" disabled>
+        </div>
+    </div>
+
+    <button type="submit">Próximo</button>
+</form>
+
+
         <?php elseif ($etapa === 2): ?>
             <form method="POST">
                 <h3>Método de Pagamento</h3>
