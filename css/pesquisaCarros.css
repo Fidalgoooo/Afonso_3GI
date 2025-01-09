@@ -1,0 +1,123 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  p {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* Container principal */
+  .car-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  /* Cartão do carro */
+  .car-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .car-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .car-card h2 {
+    font-size: 1.2rem;
+    color: #222;
+    margin: 10px 0;
+  }
+  
+  .car-card p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 5px 0;
+  }
+  
+  .car-card .price {
+    font-size: 1.1rem;
+    color: #5a5aee;
+    font-weight: bold;
+    margin: 15px 0;
+  }
+  
+  /* Botão de reserva */
+  .car-card .btn-reserve {
+    display: inline-block;
+    background-color: #5a5aee;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .car-card .btn-reserve:hover {
+    background-color: #3a3aad;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .car-card {
+      width: 100%;
+      max-width: 350px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+  
+    p {
+      font-size: 0.9rem;
+    }
+  
+    .car-card {
+      padding: 10px;
+    }
+  
+    .car-card .btn-reserve {
+      font-size: 0.9rem;
+    }
+  }
+  

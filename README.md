@@ -1,2 +1,0 @@
-# SprintCar
-Minipap

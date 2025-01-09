@@ -1,0 +1,148 @@
+/* Reset básico */
+body, h1, h2, h3, p, ul, ol, li, a, button, input, select {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fonte e cor padrão */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #2d2d86, #6a5acd);
+    color: #fff;
+    padding: 20px;
+}
+
+/* Container principal */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Detalhes do carro */
+.car-details {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.car-details img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.car-details img:hover {
+    transform: scale(1.05);
+}
+
+.car-details h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffd700;
+}
+
+.car-details p {
+    font-size: 18px;
+}
+
+/* Formulários */
+form {
+    margin-top: 20px;
+}
+
+form h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ffd700;
+}
+
+label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 500;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+input:focus, select:focus {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #ffd700;
+    color: #2d2d86;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: #ffc107;
+    transform: translateY(-2px);
+}
+
+/* Mensagens de erro */
+.error {
+    color: #ff4d4d;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Resumo da etapa 3 */
+p {
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+p strong {
+    color: #ffd700;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .car-details h2 {
+        font-size: 22px;
+    }
+
+    form h3 {
+        font-size: 20px;
+    }
+
+    input, select {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 16px;
+    }
+}

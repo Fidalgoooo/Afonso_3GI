@@ -1,0 +1,222 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  
+  
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logotipo */
+.header .logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.header .logo-container img {
+  height: 50px; /* Ajusta a altura do logotipo */
+  width: auto;
+  margin-right: 10px; /* Espaço entre o logotipo e o texto, se necessário */
+}
+
+.header .logo-container .logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Navegação */
+.header .nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.header .nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.header .nav-links a:hover {
+  color: #6A5AE0;
+}
+
+/* Botão de Login */
+.header .login-btn {
+  padding: 10px 20px;
+  background-color: #6A5AE0;
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.header .login-btn:hover {
+  background-color: #4C45B2;
+}
+
+/* Botão de Logout */
+.header .logout-btn {
+  padding: 6px 12px; /* Reduzido para ocupar menos espaço */
+  background-color: #6A5AE0;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px; /* Menor arredondamento para não parecer tão largo */
+  font-size: 14px; /* Tamanho de fonte reduzido */
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.header .logout-btn:hover {
+  background-color: #4C45B2;
+}
+
+/* Menu do Utilizador */
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.user-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 150px;
+  z-index: 1;
+}
+
+.dropdown-menu a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  margin-top: 8px;
+}
+
+.dropdown-menu a:hover {
+  color: #007BFF;
+}
+
+  
+
+    /*----------------------------------------------------*/
+  
+    /* Footer */
+    .footer {
+      background-color: #f9f9f9;
+      padding: 20px 10px; /* Reduzido de 40px 20px */
+      color: #333;
+      border-top: 1px solid #ddd;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; /* Reduzido de 40px */
+    }
+    
+    .footer-column {
+      flex: 1;
+      min-width: 150px; /* Reduzido de 200px */
+    }
+    
+    .footer-column h3 {
+      font-size: 16px; /* Reduzido de 18px */
+      color: #000;
+      margin-bottom: 10px; /* Reduzido de 15px */
+    }
+    
+    .footer-column p {
+      font-size: 13px; /* Reduzido de 14px */
+      color: #666;
+      line-height: 1.4; /* Reduzido de 1.6 */
+      margin-bottom: 10px; /* Reduzido de 15px */
+    }
+    
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 8px; /* Reduzido de 10px */
+    }
+    
+    .footer-column ul li a {
+      text-decoration: none;
+      font-size: 13px; /* Reduzido de 14px */
+      color: #6A5AE0;
+      transition: color 0.3s;
+    }
+    
+    .footer-column ul li a:hover {
+      color: #4C45B2;
+    }
+    
+    .footer-socials {
+      display: flex;
+      gap: 8px; /* Reduzido de 10px */
+      margin-top: 8px; /* Reduzido de 10px */
+    }
+    
+    .footer-socials a img {
+      width: 20px; /* Reduzido de 24px */
+      height: 20px; /* Reduzido de 24px */
+      transition: transform 0.3s ease;
+    }
+    
+    .footer-socials a img:hover {
+      transform: scale(1.1);
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      margin-top: 20px; /* Reduzido de 40px */
+      font-size: 12px; /* Reduzido de 14px */
+      color: #999;
+    }
+
+
+
+
+
+
+
+
+
+
+    
