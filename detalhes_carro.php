@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-include 'user_menu.php';
+include 'menu.php';
 
 
 // Recuperar as datas do URL ou da sessão
