@@ -73,7 +73,6 @@
                     <li><a href="index.php">Início</a></li>
                     <li><a href="informacoes/sobre.php">Sobre Nós</a></li>
                     <li><a href="informacoes/contacto.php">Contactos</a></li>
-                    <li><a href="#">Termos de Serviço</a></li>
                     <li><a href="#">Política de Privacidade</a></li>
                 </ul>
             </div>

@@ -113,5 +113,8 @@ function get_value($array, $key, $default = 'Não especificado') {
             </ul>
         </div>
     </div>
+    <div>
+        <?php include 'footer.php'; ?>
+    </div>
 </body>
 </html>
