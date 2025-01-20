@@ -4,8 +4,8 @@
 </a>
   <nav class="nav-links">
     <a href="index.php">Início</a>
-    <a href="informacoes/sobre.php">Sobre Nós</a>
-    <a href="informacoes/contacto.php">Contactos</a>
+    <a href="sobre.php">Sobre Nós</a>
+    <a href="contacto.php">Contactos</a>
   </nav>
 
   <!-- Verifica se o utilizador está logado -->
@@ -17,7 +17,7 @@
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</span>
                 <!-- Mostrar o botão do painel de administração apenas se for admin -->
                 <?php if (isset($_SESSION['user_permission']) && $_SESSION['user_permission'] === 'adm'): ?>
-                    <a href="dashboard.php" class="admin-btn">Admin</a>
+                    <a href="admin/dashboard.php" class="admin-btn">Admin</a>
                 <?php endif; ?>
                 <a href="logout.php" class="logout-btn">Logout</a>
             </div>

@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
-function obterTodosOsCarros($conn) {
+/* function obterTodosOsCarros($conn) {
     $sql = "SELECT * FROM carros";
     $result = $conn->query($sql);
 
@@ -19,7 +19,7 @@ function obterTodosOsCarros($conn) {
     }
 
     return $result;
-}
+} */
 
 
 function registarLog($conn, $id_utilizador, $acao, $descricao) {

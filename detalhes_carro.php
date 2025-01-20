@@ -1,8 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-include 'menu.php';
-
+include './scripts/menu.php';
 
 // Recuperar as datas do URL ou da sessão
 $data_retirada = $_GET['data_retirada'] ?? $_SESSION['pesquisa']['data_retirada'] ?? '';
@@ -17,39 +16,43 @@ if (!empty($data_retirada) && !empty($data_devolucao)) {
 // Limpar dados relacionados com reservas ao fazer nova pesquisa
 unset($_SESSION['data_inicio'], $_SESSION['data_fim'], $_SESSION['id_carro'], $_SESSION['nome'], $_SESSION['email'], $_SESSION['contacto'], $_SESSION['metodo_pagamento'], $_SESSION['dados_reserva'], $_SESSION['reserva_sucesso']);
 
-
 // Obter os detalhes do carro a partir do ID
 $id_carro = $_GET['id'] ?? null;
-$data_retirada = $_GET['data_retirada'] ?? null;
-$data_devolucao = $_GET['data_devolucao'] ?? null;
 
 function bool_to_text($value) {
     return $value ? 'Sim' : 'Não';
 }
 
 if ($id_carro) {
-    // Consulta com JOIN para obter dados de ambas as tabelas
+    // Nova consulta com JOIN para obter todos os dados necessários em uma única linha
     $sql = "SELECT c.marca, c.modelo, c.preco_dia, c.imagem, 
-               d.caixa, d.combustivel, d.portas, d.ar_condicionado, 
-               d.assentos, d.distancia, d.abs, d.airbags, d.controle_cruzeiro
-        FROM carros c
-        JOIN carrosDetalhes d ON c.id_carro = d.id_carro
-        WHERE c.id_carro = ?";
+                   i.caixa, i.combustivel, i.portas, i.distancia,
+                   car.ar_condicionado, car.assentos,
+                   seg.abs, seg.airbags, seg.controle_cruzeiro
+            FROM carros c
+            JOIN informacoescarro i ON c.id_carro = i.id_carro
+            LEFT JOIN caracteristicascarro car ON i.id_carro = car.id_carro
+            LEFT JOIN segurancacarro                                                                                                                                                                                                                                                                                                                                           seg ON i.id_carro = seg.id_carro
+            WHERE c.id_carro = ?";
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_carro);
     $stmt->execute();
     $carro = $stmt->get_result()->fetch_assoc();
+
+    if (!$carro) {
+        die("Carro não encontrado.");
+    }
 } else {
-    die("Carro não encontrado.");
+    die("ID do carro não especificado.");
 }
+
 
 // Função para verificar a existência da chave e fornecer um valor padrão
 function get_value($array, $key, $default = 'Não especificado') {
-    return isset($array[$key]) && $array[$key] !== null ? $array[$key] : $default;
+    return isset($array[$key]) && $array[$key] !== null ? htmlspecialchars($array[$key]) : $default;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -96,7 +99,7 @@ function get_value($array, $key, $default = 'Não especificado') {
                         <span><?= get_value($carro, 'assentos') ?></span>
                     </div>
                     <div class="spec-card">
-                        <h3>Distância</h3>
+                        <h3>Kilómetros</h3>
                         <span><?= get_value($carro, 'distancia', '0') ?> km</span>
                     </div>
                 </div>
@@ -114,7 +117,7 @@ function get_value($array, $key, $default = 'Não especificado') {
         </div>
     </div>
     <div>
-        <?php include 'footer.php'; ?>
+        <?php include './scripts/footer.php'; ?>
     </div>
 </body>
 </html>

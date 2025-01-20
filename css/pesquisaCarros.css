@@ -1,93 +1,134 @@
-  /* Container principal */
-  .car-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  /* Cartão do carro */
-  .car-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    padding: 15px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .car-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  }
-  
-  .car-card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 15px;
-  }
-  
-  .car-card h2 {
-    font-size: 1.2rem;
-    color: #222;
-    margin: 10px 0;
-  }
-  
-  .car-card p {
-    font-size: 0.9rem;
-    color: #666;
-    margin: 5px 0;
-  }
-  
-  .car-card .price {
-    font-size: 1.1rem;
-    color: #5a5aee;
-    font-weight: bold;
-    margin: 15px 0;
-  }
-  
-  /* Botão de reserva */
-  .car-card .btn-reserve {
-    display: inline-block;
-    background-color: #5a5aee;
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .car-card .btn-reserve:hover {
-    background-color: #3a3aad;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .car-card {
-      width: 100%;
-      max-width: 350px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    h1 {
-      font-size: 1.5rem;
-    }
-  
-    p {
-      font-size: 0.9rem;
-    }
-  
-    .car-card {
-      padding: 10px;
-    }
-  
-    .car-card .btn-reserve {
-      font-size: 0.9rem;
-    }
-  }
-  
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.car-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.car-image {
+  flex: 1;
+  max-width: 200px;
+  height: auto;
+  object-fit: cover;
+}
+
+.car-details {
+  flex: 2;
+  padding: 0 15px;
+}
+
+.car-details h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.car-info ul {
+  padding: 0;
+  list-style: none;
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.features li {
+  color: #28a745;
+}
+
+.price-section {
+  flex: 1;
+  text-align: center; /* Centraliza os textos dentro da seção */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Alinha os itens à direita */
+  gap: 5px; /* Espaçamento entre os itens */
+}
+
+.price-section p {
+  font-size: 0.75rem; /* Texto pequeno para "DESDE" */
+  color: #666;
+  margin: 0;
+}
+
+.price-section h2 {
+  font-size: 1.2rem; /* Menor do que antes, para combinar com a imagem */
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.price-section small {
+  font-size: 0.75rem; /* Texto menor para o total */
+  color: #888;
+}
+
+.price-section .btn-reserve {
+  display: inline-block;
+  padding: 8px 16px; /* Botão compacto */
+  background-color: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem; /* Texto menor no botão */
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 8px; /* Espaçamento acima do botão */
+  width: 100px; /* Largura fixa para manter o botão consistente */
+}
+
+.price-section .btn-reserve:hover {
+  background-color: #ffc107;
+}
+
+
+.feature-green {
+  color: #28a745; /* Verde padrão */
+  font-weight: bold; /* Opcional: Destacar */
+}
+
+
+/* ---------------------------------------------------------------------- */
+
+

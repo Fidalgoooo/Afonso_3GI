@@ -71,8 +71,8 @@
                 <h3>Links Rápidos</h3>
                 <ul>
                     <li><a href="index.php">Início</a></li>
-                    <li><a href="informacoes/sobre.php">Sobre Nós</a></li>
-                    <li><a href="informacoes/contacto.php">Contactos</a></li>
+                    <li><a href="sobre.php">Sobre Nós</a></li>
+                    <li><a href="contacto.php">Contactos</a></li>
                     <li><a href="#">Política de Privacidade</a></li>
                 </ul>
             </div>

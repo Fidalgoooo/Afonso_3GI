@@ -19,8 +19,8 @@ session_start();
 </a>
   <nav class="nav-links">
     <a href="index.php">Início</a>
-    <a href="informacoes/sobre.php">Sobre Nós</a>
-    <a href="informacoes/contacto.php">Contactos</a>
+    <a href="sobre.php">Sobre Nós</a>
+    <a href="contacto.php">Contactos</a>
   </nav>
 
   <!-- Verifica se o utilizador está logado -->
@@ -87,20 +87,8 @@ session_start();
       <button type="submit" class="btn-secondary">Reserve Agora</button>
   </div>
 
-<script>
-  // Validação de data: a data de devolução não pode ser antes da data do Levantamento
-  const pickupDate = document.getElementById('pickup-date');
-  const returnDate = document.getElementById('return-date');
+<script src="scripts/date.js"></script>
 
-  returnDate.addEventListener('change', function() {
-    if (new Date(returnDate.value) < new Date(pickupDate.value)) {
-      alert("A data de devolução não pode ser antes da data do Levantamento.");
-      returnDate.setCustomValidity("A data de devolução não pode ser antes da data do Levantamento.");
-    } else {
-      returnDate.setCustomValidity("");
-    }
-  });
-</script>
 
   <!-- Features Section -->
   <section class="features">
@@ -121,21 +109,8 @@ session_start();
     </div>
   </section>
 
-<!-- Testimonials Section 
-  <section class="testimonials" data-aos="fade-up">
-    <h2>O que os nossos clientes dizem</h2>
-    <div class="testimonial">
-      <p>"Serviço excelente! O carro estava impecável e o atendimento foi super atencioso."</p>
-      <h4>- João Silva</h4>
-    </div>
-    <div class="testimonial">
-      <p>"Recomendo vivamente! Aluguei um carro em Lisboa e foi uma experiência tranquila."</p>
-      <h4>- Maria Oliveira</h4>
-    </div>
-  </section> -->
-
   <div>
-    <?php include 'footer.php'; ?>
+    <?php include './scripts/footer.php'; ?>
   </div>
 
 </body>

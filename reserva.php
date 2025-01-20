@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-include 'menu.php'; 
+include './scripts/menu.php'; 
 
 // Verifica se o utilizador está autenticado
 if (!isset($_SESSION['user_id'])) {
@@ -57,7 +57,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['nome'] = $_POST['nome'];
         $_SESSION['email'] = $_POST['email'];
         $_SESSION['contacto'] = $_POST['contacto'];
-        $_SESSION['etapa'] = 2; // Avançar para a próxima etapa
+        
+        // Inserir dados na tabela condutores
+        $sql = "INSERT INTO condutores (nome, email, contacto) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Erro na preparação da query: " . $conn->error);
+        }
+
+        $stmt->bind_param(
+            "sss", // Tipos dos parâmetros: s (string)
+            $_POST['nome'],
+            $_POST['email'],
+            $_POST['contacto']
+        );
+
+        if (!$stmt->execute()) {
+            die("Erro ao inserir condutor: " . $stmt->error);
+        }
+
+        $stmt->close();
+
+        // Avançar para a próxima etapa
+        $_SESSION['etapa'] = 2;
         header("Location: reserva.php");
         exit;
     } elseif ($etapa === 2) {
@@ -91,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Query para inserir a reserva na base de dados
         $sql = "INSERT INTO reservas (id_carro, nome, email, contacto, data_inicio, data_fim, metodo_pagamento, preco_total) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                
         $stmt = $conn->prepare($sql);
 
         if (!$stmt) {
@@ -119,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -209,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
     </div>
     <div>
-        <?php include 'footer.php'; ?>
+        <?php include './scripts/footer.php'; ?>
     </div>
     
 </body>
