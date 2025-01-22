@@ -205,9 +205,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h3>Método de Pagamento</h3>
                 <label for="metodo_pagamento">Escolha um método:</label>
                 <select name="metodo_pagamento" id="metodo_pagamento" required>
-                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Cartao de Credito">Cartão de Crédito</option>
                     <option value="PayPal">PayPal</option>
-                    <option value="Transferência Bancária">Transferência Bancária</option>
+                    <option value="Transferencia Bancaria">Transferência Bancária</option>
                 </select>
 
                 <button type="submit">Próximo</button>

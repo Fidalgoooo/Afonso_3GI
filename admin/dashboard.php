@@ -10,97 +10,149 @@ if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'ad
 
 // Queries para o dashboard
 $users_query = "SELECT COUNT(*) as total FROM utilizadores";
-$users_result = mysqli_fetch_assoc(mysqli_query($conn, $users_query))['total'];
+$users_result = mysqli_fetch_assoc(mysqli_query($conn, $users_query))['total'] ?? 0;
 
 $drivers_query = "SELECT COUNT(*) as total FROM condutores";
-$drivers_result = mysqli_fetch_assoc(mysqli_query($conn, $drivers_query))['total'];
+$drivers_result = mysqli_fetch_assoc(mysqli_query($conn, $drivers_query))['total'] ?? 0;
 
 $vehicles_query = "SELECT COUNT(*) as total FROM carros";
-$vehicles_result = mysqli_fetch_assoc(mysqli_query($conn, $vehicles_query))['total'];
+$vehicles_result = mysqli_fetch_assoc(mysqli_query($conn, $vehicles_query))['total'] ?? 0;
 
 $bookings_query = "SELECT COUNT(*) as total FROM reservas";
-$bookings_result = mysqli_fetch_assoc(mysqli_query($conn, $bookings_query))['total'];
+$bookings_result = mysqli_fetch_assoc(mysqli_query($conn, $bookings_query))['total'] ?? 0;
+
+// Query para calcular o faturamento do primeiro semestre
+$faturamento_query = "
+    SELECT MONTH(data_registo) AS mes, SUM(preco_total) AS faturamento
+    FROM reservas
+    WHERE MONTH(data_registo) BETWEEN 1 AND 6 AND YEAR(data_registo) = YEAR(CURDATE())
+    GROUP BY MONTH(data_registo)
+";
+$faturamento_result = mysqli_query($conn, $faturamento_query);
+
+// Inicializa o faturamento com 0 para os meses do primeiro semestre
+$faturamentoSemestre = array_fill(1, 6, 0);
+
+while ($row = mysqli_fetch_assoc($faturamento_result)) {
+    $faturamentoSemestre[(int)$row['mes']] = (float)$row['faturamento'];
+}
+
+// Calcula veículos ocupados e disponíveis
+$ocupados_query = "SELECT COUNT(*) as total FROM reservas WHERE data_fim >= NOW()";
+$ocupados_result = mysqli_fetch_assoc(mysqli_query($conn, $ocupados_query))['total'] ?? 0;
+
+$total_veiculos = $vehicles_result;
+$disponiveis = $total_veiculos - $ocupados_result;
+
+// Meses do primeiro semestre
+$mesesSemestre = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho"];
+
+// Envia os dados para o JavaScript
+echo '<script>
+    const faturamentoSemestre = ' . json_encode($faturamentoSemestre) . ';
+    const mesesSemestre = ' . json_encode($mesesSemestre) . ';
+    const usersData = ' . $users_result . ';
+    const driversData = ' . $drivers_result . ';
+    const vehiclesData = ' . $vehicles_result . ';
+    const bookingsData = ' . $bookings_result . ';
+    const ocupados = ' . $ocupados_result . ';
+    const disponiveis = ' . $disponiveis . ';
+</script>';
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Vehicle Booking System</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Dashboard - Admin Panel</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <aside class="sidebar">
-            <h2>Vehicle Booking System</h2>
+            <h2>Admin Panel</h2>
             <ul>
                 <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="users.php"><i class="fas fa-users"></i> Users</a></li>
-                <li><a href="drivers.php"><i class="fas fa-id-card"></i> Drivers</a></li>
-                <li><a href="vehicles.php"><i class="fas fa-car"></i> Vehicles</a></li>
-                <li><a href="bookings.php"><i class="fas fa-book"></i> Bookings</a></li>
-                <li><a href="feedbacks.php"><i class="fas fa-comment"></i> Feedbacks</a></li>
+                <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
+                <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
+                <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
+                <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
                 <li><a href="password_resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
-                <li><a href="logs.php"><i class="fas fa-cogs"></i> System Logs</a></li>
+                <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
             </ul>
         </aside>
         
         <main class="dashboard">
             <div class="cards">
                 <div class="card">
-                    <h3><?php echo $users_result; ?> Users</h3>
-                    <a href="users.php">View Details</a>
+                    <h3><?php echo $users_result; ?> Utilizadores</h3>
+                    <a href="utilizadores.php">Ver Detalhes</a>
                 </div>
                 <div class="card">
-                    <h3><?php echo $drivers_result; ?> Drivers</h3>
-                    <a href="drivers.php">View Details</a>
+                    <h3><?php echo $drivers_result; ?> Condutores</h3>
+                    <a href="condutores.php">Ver Detalhes</a>
                 </div>
                 <div class="card">
-                    <h3><?php echo $vehicles_result; ?> Vehicles</h3>
-                    <a href="vehicles.php">View Details</a>
+                    <h3><?php echo $vehicles_result; ?> Veículos</h3>
+                    <a href="veiculos.php">Ver Detalhes</a>
                 </div>
                 <div class="card">
-                    <h3><?php echo $bookings_result; ?> Bookings</h3>
-                    <a href="bookings.php">View Details</a>
+                    <h3><?php echo $bookings_result; ?> Reservas</h3>
+                    <a href="reservas.php">Ver Detalhes</a>
+                </div>
+            </div>
+
+            <div class="charts">
+                <div class="chart-container">
+                    <canvas id="usersChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="gaugeChart"></canvas>
                 </div>
             </div>
 
             <div class="table-section">
-                <h2>Bookings</h2>
+                <h2>Reservas</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Nome</th>
-                            <th>Telefone</th>
-                            <th>Vehicle Type</th>
-                            <th>Reg No</th>
-                            <th>Booking Date</th>
-                            <th>Status</th>
+                            <th>Email</th>
+                            <th>Contacto</th>
+                            <th>Data Início</th>
+                            <th>Data Fim</th>
+                            <th>Método de Pagamento</th>
+                            <th>Preço Total</th>
+                            <th>Data Registo</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $result = mysqli_query($conn, "SELECT r.id, u.nome as name, u.telefone as phone, c.tipo as vehicle_type, c.reg_no, r.data_reserva as booking_date, r.status 
-                                                       FROM reservas r 
-                                                       JOIN utilizadores u ON r.id_utilizador = u.id 
-                                                       JOIN carros c ON r.id_carro = c.id");
-                        if (mysqli_num_rows($result) > 0) {
+                        $result = mysqli_query($conn, "SELECT nome, email, contacto, data_inicio, data_fim, metodo_pagamento, preco_total, data_registo FROM reservas");
+                        if ($result && mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo "<tr>
-                                    <td>{$row['id']}</td>
-                                    <td>{$row['name']}</td>
-                                    <td>{$row['phone']}</td>
-                                    <td>{$row['vehicle_type']}</td>
-                                    <td>{$row['reg_no']}</td>
-                                    <td>{$row['booking_date']}</td>
-                                    <td>{$row['status']}</td>
+                                    <td>{$row['nome']}</td>
+                                    <td>{$row['email']}</td>
+                                    <td>{$row['contacto']}</td>
+                                    <td>{$row['data_inicio']}</td>
+                                    <td>{$row['data_fim']}</td>
+                                    <td>{$row['metodo_pagamento']}</td>
+                                    <td>{$row['preco_total']}</td>
+                                    <td>{$row['data_registo']}</td>
                                 </tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='7'>No bookings available</td></tr>";
+                            echo "<tr><td colspan='8'>Nenhuma Reserva</td></tr>";
                         }
                         ?>
                     </tbody>
@@ -108,5 +160,19 @@ $bookings_result = mysqli_fetch_assoc(mysqli_query($conn, $bookings_query))['tot
             </div>
         </main>
     </div>
+
+    <script>
+        const usersData = <?php echo $users_result; ?>;
+        const driversData = <?php echo $drivers_result; ?>;
+        const vehiclesData = <?php echo $vehicles_result; ?>;
+        const bookingsData = <?php echo $bookings_result; ?>;
+        const reservasMensais = <?php echo json_encode($reservas_mensais); ?>;
+        const meses = <?php echo json_encode($meses); ?>;
+        const ocupados = <?php echo $ocupados_result; ?>;
+        const disponiveis = <?php echo $disponiveis; ?>;
+    </script>
+
+    <script src="../scripts/graficos.js"></script>
+
 </body>
 </html>
