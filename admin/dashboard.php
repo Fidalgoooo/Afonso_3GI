@@ -75,7 +75,7 @@ echo '<script>
 </head>
 <body>
     <div class="container">
-        <aside class="sidebar">
+    <aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
                 <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
@@ -83,8 +83,9 @@ echo '<script>
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
                 <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="password_resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
+                <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
                 <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
         </aside>
         
@@ -121,45 +122,53 @@ echo '<script>
             </div>
 
             <div class="table-section">
-                <h2>Reservas</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Contacto</th>
-                            <th>Data Início</th>
-                            <th>Data Fim</th>
-                            <th>Método de Pagamento</th>
-                            <th>Preço Total</th>
-                            <th>Data Registo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $result = mysqli_query($conn, "SELECT nome, email, contacto, data_inicio, data_fim, metodo_pagamento, preco_total, data_registo FROM reservas");
-                        if ($result && mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>
-                                    <td>{$row['nome']}</td>
-                                    <td>{$row['email']}</td>
-                                    <td>{$row['contacto']}</td>
-                                    <td>{$row['data_inicio']}</td>
-                                    <td>{$row['data_fim']}</td>
-                                    <td>{$row['metodo_pagamento']}</td>
-                                    <td>{$row['preco_total']}</td>
-                                    <td>{$row['data_registo']}</td>
-                                </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='8'>Nenhuma Reserva</td></tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </main>
-    </div>
+    <h2>Reservas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Contacto</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>Método de Pagamento</th>
+                <th>Veículo</th>
+                <th>Preço Total</th>
+                <th>Data Registo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $query = "
+                SELECT r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, r.metodo_pagamento, 
+                       r.preco_total, r.data_registo, c.marca, c.modelo
+                FROM reservas r
+                JOIN carros c ON r.id_carro = c.id_carro
+            ";
+            $result = mysqli_query($conn, $query);
+
+            if ($result && mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>
+                        <td>{$row['nome']}</td>
+                        <td>{$row['email']}</td>
+                        <td>{$row['contacto']}</td>
+                        <td>{$row['data_inicio']}</td>
+                        <td>{$row['data_fim']}</td>
+                        <td>{$row['metodo_pagamento']}</td>
+                        <td>{$row['marca']} {$row['modelo']}</td>
+                        <td>{$row['preco_total']}</td>
+                        <td>{$row['data_registo']}</td>
+                    </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='9'>Nenhuma Reserva</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
 
     <script>
         const usersData = <?php echo $users_result; ?>;

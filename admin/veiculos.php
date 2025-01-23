@@ -2,11 +2,34 @@
 session_start();
 include '../db.php';
 
+// Função para registar logs
+if (!function_exists('registarLog')) {
+    function registarLog($conn, $id_utilizador, $acao, $descricao) {
+        $sql = "INSERT INTO logs (id_utilizador, acao, descricao) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Erro na preparação da query de log: " . $conn->error);
+        }
+
+        $stmt->bind_param("iss", $id_utilizador, $acao, $descricao);
+
+        if (!$stmt->execute()) {
+            error_log("Erro ao registar log: " . $stmt->error);
+        }
+
+        $stmt->close();
+    }
+}
+
 // Verifica se o utilizador está logado e é administrador
 if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
     header("Location: ../login.php");
     exit;
 }
+
+// Obtém o ID do utilizador logado
+$id_utilizador = $_SESSION['user_id'];
 
 // Verifica ações enviadas pelo formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,7 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "DELETE FROM carros WHERE id_carro = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $id_carro);
-            $stmt->execute();
+
+            if ($stmt->execute()) {
+                $descricao = "Veículo com ID $id_carro eliminado.";
+                registarLog($conn, $id_utilizador, 'Eliminar', $descricao);
+            } else {
+                error_log("Erro ao eliminar o veículo: " . $stmt->error);
+            }
+
             $stmt->close();
         } elseif ($action === 'adicionar') {
             $marca = $_POST['marca'];
@@ -30,7 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "INSERT INTO carros (marca, modelo, ano, preco_dia, imagem) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssids", $marca, $modelo, $ano, $preco_dia, $imagem);
-            $stmt->execute();
+
+            if ($stmt->execute()) {
+                $descricao = "Novo veículo adicionado: Marca: $marca, Modelo: $modelo, Ano: $ano, Preço/Dia: $preco_dia.";
+                registarLog($conn, $id_utilizador, 'Adicionar', $descricao);
+            } else {
+                error_log("Erro ao adicionar o veículo: " . $stmt->error);
+            }
+
             $stmt->close();
         } elseif ($action === 'editar') {
             $id_carro = intval($_POST['id_carro']);
@@ -43,7 +80,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "UPDATE carros SET marca = ?, modelo = ?, ano = ?, preco_dia = ?, imagem = ? WHERE id_carro = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssidsi", $marca, $modelo, $ano, $preco_dia, $imagem, $id_carro);
-            $stmt->execute();
+
+            if ($stmt->execute()) {
+                $descricao = "Veículo com ID $id_carro atualizado: Marca: $marca, Modelo: $modelo, Ano: $ano, Preço/Dia: $preco_dia.";
+                registarLog($conn, $id_utilizador, 'Editar', $descricao);
+            } else {
+                error_log("Erro ao atualizar o veículo: " . $stmt->error);
+            }
+
             $stmt->close();
         }
     }
@@ -75,8 +119,9 @@ $result = $conn->query($sql);
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
                 <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="password_resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
+                <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
                 <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
         </aside>
 

@@ -35,8 +35,9 @@ $result = $conn->query($sql);
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
                 <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="password_resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
+                <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
                 <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
         </aside>
         

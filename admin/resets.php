@@ -37,52 +37,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $_POST['action'];
 
         if ($action === 'eliminar') {
-            $id = intval($_POST['id']);
-            $sql = "DELETE FROM condutores WHERE id = ?";
+            $id_admin = intval($_POST['id_admin']);
+            $sql = "DELETE FROM administradores WHERE id_admin = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $id);
+            $stmt->bind_param("i", $id_admin);
             $stmt->execute();
             $stmt->close();
 
             // Registar log
-            $descricao = "Condutor com ID {$id} foi eliminado.";
+            $descricao = "Administrador com ID {$id_admin} foi eliminado.";
             registarLog($conn, $id_utilizador, 'Eliminar', $descricao);
         } elseif ($action === 'adicionar') {
             $nome = $_POST['nome'];
             $email = $_POST['email'];
-            $contacto = $_POST['contacto'];
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO condutores (nome, email, contacto) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO administradores (nome, email, password) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $nome, $email, $contacto);
+            $stmt->bind_param("sss", $nome, $email, $password);
             $stmt->execute();
             $stmt->close();
 
             // Registar log
-            $descricao = "Condutor adicionado: Nome: {$nome}, Email: {$email}, Contacto: {$contacto}.";
+            $descricao = "Administrador adicionado: Nome: {$nome}, Email: {$email}.";
             registarLog($conn, $id_utilizador, 'Adicionar', $descricao);
         } elseif ($action === 'editar') {
-            $id = intval($_POST['id']);
+            $id_admin = intval($_POST['id_admin']);
             $nome = $_POST['nome'];
             $email = $_POST['email'];
-            $contacto = $_POST['contacto'];
+            $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
 
-            $sql = "UPDATE condutores SET nome = ?, email = ?, contacto = ? WHERE id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssi", $nome, $email, $contacto, $id);
+            if ($password) {
+                $sql = "UPDATE administradores SET nome = ?, email = ?, password = ? WHERE id_admin = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("sssi", $nome, $email, $password, $id_admin);
+            } else {
+                $sql = "UPDATE administradores SET nome = ?, email = ? WHERE id_admin = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssi", $nome, $email, $id_admin);
+            }
+
             $stmt->execute();
             $stmt->close();
 
             // Registar log
-            $descricao = "Condutor com ID {$id} foi editado: Nome: {$nome}, Email: {$email}, Contacto: {$contacto}.";
+            $descricao = "Administrador com ID {$id_admin} foi editado: Nome: {$nome}, Email: {$email}.";
             registarLog($conn, $id_utilizador, 'Editar', $descricao);
         }
     }
 }
 
-
-// Consulta os condutores
-$sql = "SELECT id, nome, email, contacto FROM condutores";
+// Consulta os administradores
+$sql = "SELECT id_admin, nome, email FROM administradores";
 $result = $conn->query($sql);
 ?>
 
@@ -91,13 +97,13 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Gerir Condutores</title>
+    <title>Dashboard - Gerir Administradores</title>
     <link rel="stylesheet" href="./css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-    <aside class="sidebar">
+<div class="container">
+<aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
                 <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
@@ -112,13 +118,13 @@ $result = $conn->query($sql);
         </aside>
 
         <main class="dashboard">
-            <h1>Condutores</h1>
+            <h1>Administradores</h1>
             <table>
                 <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
-                        <th>Contacto</th>
+                        <th>Password</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -128,9 +134,9 @@ $result = $conn->query($sql);
                         <form method="post">
                             <td><input type="text" name="nome" value="<?php echo htmlspecialchars($row['nome']); ?>"></td>
                             <td><input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>"></td>
-                            <td><input type="text" name="contacto" value="<?php echo htmlspecialchars($row['contacto']); ?>"></td>
+                            <td><input type="password" name="password" placeholder="Nova senha"></td>
                             <td>
-                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                <input type="hidden" name="id_admin" value="<?php echo $row['id_admin']; ?>">
                                 <button type="submit" name="action" value="editar">Guardar</button>
                                 <button type="submit" name="action" value="eliminar">Eliminar</button>
                             </td>
@@ -139,14 +145,6 @@ $result = $conn->query($sql);
                     <?php endwhile; ?>
                 </tbody>
             </table>
-
-            <h2>Adicionar Condutor</h2>
-            <form method="post">
-                <input type="text" name="nome" placeholder="Nome" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="contacto" placeholder="Contacto" required>
-                <button type="submit" name="action" value="adicionar">Adicionar</button>
-            </form>
         </main>
     </div>
 </body>

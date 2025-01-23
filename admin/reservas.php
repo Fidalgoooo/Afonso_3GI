@@ -2,11 +2,34 @@
 session_start();
 include '../db.php';
 
+// Função para registar logs
+if (!function_exists('registarLog')) {
+    function registarLog($conn, $id_utilizador, $acao, $descricao) {
+        $sql = "INSERT INTO logs (id_utilizador, acao, descricao) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Erro na preparação da query de log: " . $conn->error);
+        }
+
+        $stmt->bind_param("iss", $id_utilizador, $acao, $descricao);
+
+        if (!$stmt->execute()) {
+            error_log("Erro ao registar log: " . $stmt->error);
+        }
+
+        $stmt->close();
+    }
+}
+
 // Verifica se o utilizador está logado e é administrador
 if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
     header("Location: ../login.php");
     exit;
 }
+
+// Obtém o ID do utilizador logado
+$id_utilizador = $_SESSION['user_id'];
 
 // Verifica ações enviadas pelo formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,6 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("i", $id_reserva);
             $stmt->execute();
             $stmt->close();
+
+            // Registar log
+            $descricao = "Reserva com ID {$id_reserva} foi eliminada.";
+            registarLog($conn, $id_utilizador, 'Eliminar', $descricao);
         } elseif ($action === 'adicionar') {
             $nome = $_POST['nome'];
             $email = $_POST['email'];
@@ -28,13 +55,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data_fim = $_POST['data_fim'];
             $metodo_pagamento = $_POST['metodo_pagamento'];
             $preco_total = floatval($_POST['preco_total']);
+            $id_carro = intval($_POST['id_carro']);
             $data_registo = date('Y-m-d H:i:s');
 
-            $sql = "INSERT INTO reservas (nome, email, contacto, data_inicio, data_fim, metodo_pagamento, preco_total, data_registo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO reservas (nome, email, contacto, data_inicio, data_fim, metodo_pagamento, preco_total, id_carro, data_registo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssssds", $nome, $email, $contacto, $data_inicio, $data_fim, $metodo_pagamento, $preco_total, $data_registo);
+            $stmt->bind_param("ssssssdis", $nome, $email, $contacto, $data_inicio, $data_fim, $metodo_pagamento, $preco_total, $id_carro, $data_registo);
             $stmt->execute();
             $stmt->close();
+
+            // Registar log
+            $descricao = "Nova reserva adicionada: Nome: {$nome}, Email: {$email}, Contacto: {$contacto}, Data Início: {$data_inicio}, Data Fim: {$data_fim}, Preço Total: {$preco_total}€, Veículo ID: {$id_carro}.";
+            registarLog($conn, $id_utilizador, 'Adicionar', $descricao);
         } elseif ($action === 'editar') {
             $id_reserva = intval($_POST['id_reserva']);
             $nome = $_POST['nome'];
@@ -48,12 +80,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("sssssi", $nome, $email, $contacto, $data_inicio, $data_fim, $id_reserva);
             $stmt->execute();
             $stmt->close();
+
+            // Registar log
+            $descricao = "Reserva com ID {$id_reserva} foi editada: Nome: {$nome}, Email: {$email}, Contacto: {$contacto}, Data Início: {$data_inicio}, Data Fim: {$data_fim}.";
+            registarLog($conn, $id_utilizador, 'Editar', $descricao);
         }
     }
 }
 
 // Consulta as reservas
-$sql = "SELECT id_reserva, nome, email, contacto, data_inicio, data_fim, metodo_pagamento, preco_total, data_registo FROM reservas";
+$sql = "
+    SELECT r.id_reserva, r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, 
+           r.metodo_pagamento, r.preco_total, r.data_registo, c.marca, c.modelo
+    FROM reservas r
+    LEFT JOIN carros c ON r.id_carro = c.id_carro
+";
 $result = $conn->query($sql);
 ?>
 
@@ -76,8 +117,9 @@ $result = $conn->query($sql);
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
                 <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="password_resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
+                <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
                 <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
         </aside>
 
@@ -92,6 +134,7 @@ $result = $conn->query($sql);
                         <th>Data Início</th>
                         <th>Data Fim</th>
                         <th>Método Pagamento</th>
+                        <th>Veículo</th>
                         <th>Preço Total</th>
                         <th>Data Registo</th>
                         <th>Ações</th>
@@ -107,6 +150,15 @@ $result = $conn->query($sql);
                             <td><input type="date" name="data_inicio" value="<?php echo htmlspecialchars($row['data_inicio']); ?>" required></td>
                             <td><input type="date" name="data_fim" value="<?php echo htmlspecialchars($row['data_fim']); ?>" required></td>
                             <td><?php echo htmlspecialchars($row['metodo_pagamento']); ?></td>
+                            <td>
+                                <?php 
+                                if (isset($row['marca']) && isset($row['modelo'])) {
+                                    echo htmlspecialchars($row['marca'] . ' ' . $row['modelo']);
+                                } else {
+                                    echo "Veículo não associado";
+                                }
+                                ?>
+                            </td>
                             <td><?php echo htmlspecialchars($row['preco_total']); ?></td>
                             <td><?php echo htmlspecialchars($row['data_registo']); ?></td>
                             <td>

@@ -2,6 +2,26 @@
 session_start();
 include '../db.php';
 
+// Função para registar logs
+if (!function_exists('registarLog')) {
+    function registarLog($conn, $id_utilizador, $acao, $descricao) {
+        $sql = "INSERT INTO logs (id_utilizador, acao, descricao, data_hora) VALUES (?, ?, ?, NOW())";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Erro na preparação da query de log: " . $conn->error);
+        }
+
+        $stmt->bind_param("iss", $id_utilizador, $acao, $descricao);
+
+        if (!$stmt->execute()) {
+            error_log("Erro ao registar log: " . $stmt->error);
+        }
+
+        $stmt->close();
+    }
+}
+
 // Verifica se o utilizador está logado e é administrador
 if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
     header("Location: ../login.php");
@@ -57,6 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $stmt->execute();
 
         $conn->commit();
+
+        // Registar log
+        $id_utilizador = $_SESSION['user_id']; // ID do administrador logado
+        $descricao = "Novo veículo adicionado: Marca: $marca, Modelo: $modelo, Ano: $ano, Preço/Dia: $preco_dia.";
+        registarLog($conn, $id_utilizador, 'Adicionar', $descricao);
+
         $success_message = "Veículo adicionado com sucesso!";
     } catch (Exception $e) {
         $conn->rollback();
@@ -66,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $stmt->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,8 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
                 <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="password_resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
+                <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
                 <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
         </aside>
 
@@ -143,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </div>
 
             <div class="form-group">
-                <label for="distancia">Distância (km):</label>
+                <label for="distancia">Quilómetros (km):</label>
                 <input type="number" id="distancia" name="distancia" placeholder="Distância" required>
             </div>
 

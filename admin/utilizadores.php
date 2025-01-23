@@ -2,6 +2,26 @@
 session_start();
 include '../db.php';
 
+// Função para registar logs
+if (!function_exists('registarLog')) {
+    function registarLog($conn, $id_utilizador, $acao, $descricao) {
+        $sql = "INSERT INTO logs (id_utilizador, acao, descricao) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Erro na preparação da query de log: " . $conn->error);
+        }
+
+        $stmt->bind_param("iss", $id_utilizador, $acao, $descricao);
+
+        if (!$stmt->execute()) {
+            error_log("Erro ao registar log: " . $stmt->error);
+        }
+
+        $stmt->close();
+    }
+}
+
 // Verifica se o utilizador está logado e é administrador
 if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
     header("Location: ../login.php");
@@ -9,20 +29,21 @@ if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'ad
 }
 
 // Verifica ações enviadas pelo formulário
-// Ações para a tabela utilizadores
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
-        $id_utilizador = $_SESSION['user_id'];
+        $id_utilizador = $_SESSION['user_id']; // ID do administrador logado
 
         if ($action === 'eliminar') {
             $id_user = intval($_POST['id_utilizador']);
             $sql = "DELETE FROM utilizadores WHERE id_utilizador = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $id_user);
+
             if ($stmt->execute()) {
                 $message = "Utilizador eliminado com sucesso.";
-                registarLog($conn, $id_utilizador, 'eliminar', "Utilizador ID $id_user eliminado.");
+                $descricao = "Utilizador com ID $id_user eliminado.";
+                registarLog($conn, $id_utilizador, 'Eliminar', $descricao);
             } else {
                 $message = "Erro ao eliminar o utilizador.";
             }
@@ -36,9 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "INSERT INTO utilizadores (nome, email, password, permissao) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssss", $nome, $email, $password, $permissao);
+
             if ($stmt->execute()) {
                 $message = "Utilizador adicionado com sucesso.";
-                registarLog($conn, $id_utilizador, 'adicionar', "Utilizador $nome adicionado.");
+                $descricao = "Novo utilizador adicionado: Nome: $nome, Email: $email, Permissão: $permissao.";
+                registarLog($conn, $id_utilizador, 'Adicionar', $descricao);
             } else {
                 $message = "Erro ao adicionar o utilizador.";
             }
@@ -52,9 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "UPDATE utilizadores SET nome = ?, email = ?, permissao = ? WHERE id_utilizador = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssi", $nome, $email, $permissao, $id_user);
+
             if ($stmt->execute()) {
                 $message = "Utilizador atualizado com sucesso.";
-                registarLog($conn, $id_utilizador, 'editar', "Utilizador ID $id_user atualizado.");
+                $descricao = "Utilizador com ID $id_user atualizado: Nome: $nome, Email: $email, Permissão: $permissao.";
+                registarLog($conn, $id_utilizador, 'Editar', $descricao);
             } else {
                 $message = "Erro ao atualizar o utilizador.";
             }
@@ -62,7 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
 
 // Consulta os utilizadores
 $sql = "SELECT id_utilizador, nome, email, permissao FROM utilizadores";
@@ -89,8 +113,9 @@ $result = $conn->query($sql);
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
                 <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="password_resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
+                <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
                 <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
         </aside>
 
