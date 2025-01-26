@@ -23,7 +23,7 @@ if (!function_exists('registarLog')) {
 }
 
 // Verifica se o utilizador está logado e é administrador
-if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
+if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'adm' && $_SESSION['user_permission'] !== 'chiefadmin')) {
     header("Location: ../login.php");
     exit;
 }
@@ -93,6 +93,8 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Gerir Condutores</title>
     <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/adicionar.css">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -100,7 +102,7 @@ $result = $conn->query($sql);
     <aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
-                <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
@@ -113,6 +115,13 @@ $result = $conn->query($sql);
 
         <main class="dashboard">
             <h1>Condutores</h1>
+            <h2>Adicionar Condutor</h2>
+            <form method="post" class="adicionar">
+                <input type="text" name="nome" placeholder="Nome" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="contacto" placeholder="Contacto" required>
+                <button type="submit" name="action" value="adicionar">Adicionar</button>
+            </form>
             <table>
                 <thead>
                     <tr>
@@ -139,14 +148,6 @@ $result = $conn->query($sql);
                     <?php endwhile; ?>
                 </tbody>
             </table>
-
-            <h2>Adicionar Condutor</h2>
-            <form method="post">
-                <input type="text" name="nome" placeholder="Nome" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="contacto" placeholder="Contacto" required>
-                <button type="submit" name="action" value="adicionar">Adicionar</button>
-            </form>
         </main>
     </div>
 </body>

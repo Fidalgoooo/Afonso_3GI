@@ -23,7 +23,7 @@ if (!function_exists('registarLog')) {
 }
 
 // Verifica se o utilizador está logado e é administrador
-if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
+if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'adm' && $_SESSION['user_permission'] !== 'chiefadmin')) {
     header("Location: ../login.php");
     exit;
 }
@@ -108,7 +108,7 @@ $result = $conn->query($sql);
     <aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
-                <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
@@ -121,6 +121,17 @@ $result = $conn->query($sql);
 
         <main class="dashboard">
             <h1>Utilizadores</h1>
+            <h2>Adicionar Utilizador</h2>
+            <form method="post" class="adicionar">
+                <input type="text" name="nome" placeholder="Nome" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <select name="permissao">
+                    <option value="utilizador">Utilizador</option>
+                    <option value="adm">Administrador</option>
+                </select>
+                <button type="submit" name="action" value="adicionar">Adicionar</button>
+            </form>
             <table>
                 <thead>
                     <tr>
@@ -136,12 +147,8 @@ $result = $conn->query($sql);
                         <form method="post">
                             <td><input type="text" name="nome" value="<?php echo htmlspecialchars($row['nome']); ?>"></td>
                             <td><input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>"></td>
-                            <td>
-                                <select name="permissao">
-                                    <option value="adm" <?php echo $row['permissao'] === 'adm' ? 'selected' : ''; ?>>Administrador</option>
-                                    <option value="utilizador" <?php echo $row['permissao'] === 'utilizador' ? 'selected' : ''; ?>>Utilizador</option>
-                                </select>
-                            </td>
+                            <td><?php echo htmlspecialchars($row['permissao']); ?></td>
+
                             <td>
                                 <input type="hidden" name="id_utilizador" value="<?php echo $row['id_utilizador']; ?>">
                                 <button type="submit" name="action" value="editar">Guardar</button>
@@ -152,18 +159,6 @@ $result = $conn->query($sql);
                     <?php endwhile; ?>
                 </tbody>
             </table>
-
-            <h2>Adicionar Utilizador</h2>
-            <form method="post">
-                <input type="text" name="nome" placeholder="Nome" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <select name="permissao">
-                    <option value="adm">Administrador</option>
-                    <option value="utilizador">Utilizador</option>
-                </select>
-                <button type="submit" name="action" value="adicionar">Adicionar</button>
-            </form>
         </main>
     </div>
 </body>

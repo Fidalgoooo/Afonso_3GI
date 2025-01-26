@@ -23,7 +23,7 @@ if (!function_exists('registarLog')) {
 }
 
 // Verifica se o utilizador está logado e é administrador
-if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
+if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'adm' && $_SESSION['user_permission'] !== 'chiefadmin')) {
     header("Location: ../login.php");
     exit;
 }
@@ -84,6 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         registarLog($conn, $id_utilizador, 'Adicionar', $descricao);
 
         $success_message = "Veículo adicionado com sucesso!";
+
+        echo "<script>
+            setTimeout(function() {
+                window.location.href = 'veiculos.php';
+            }, 1000); // Redireciona após 1 segundo (1000ms)
+        </script>";
+
     } catch (Exception $e) {
         $conn->rollback();
         $error_message = "Erro ao adicionar o veículo: " . $e->getMessage();

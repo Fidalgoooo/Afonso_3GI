@@ -31,7 +31,7 @@ session_start();
             <div id="dropdownMenu" class="dropdown-menu">
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</span>
                 <!-- Mostrar o botão do painel de administração apenas se for admin -->
-                <?php if (isset($_SESSION['user_permission']) && $_SESSION['user_permission'] === 'adm'): ?>
+                <?php if (isset($_SESSION['user_permission']) && ($_SESSION['user_permission'] === 'adm' || $_SESSION['user_permission'] === 'chiefadmin')): ?>
                     <a href="../Afonso_3GI/admin/index.php" class="admin-btn">Admin</a>
                 <?php endif; ?>
                 <a href="logout.php" class="logout-btn">Logout</a>

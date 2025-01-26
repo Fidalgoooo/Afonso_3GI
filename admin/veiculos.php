@@ -23,7 +23,7 @@ if (!function_exists('registarLog')) {
 }
 
 // Verifica se o utilizador está logado e é administrador
-if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
+if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'adm' && $_SESSION['user_permission'] !== 'chiefadmin')) {
     header("Location: ../login.php");
     exit;
 }
@@ -114,7 +114,7 @@ $result = $conn->query($sql);
     <aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
-                <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>

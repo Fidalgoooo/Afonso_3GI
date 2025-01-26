@@ -23,7 +23,7 @@ if (!function_exists('registarLog')) {
 }
 
 // Verifica se o utilizador está logado e é administrador
-if (!isset($_SESSION['user_permission']) || $_SESSION['user_permission'] !== 'adm') {
+if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'adm' && $_SESSION['user_permission'] !== 'chiefadmin')) {
     header("Location: ../login.php");
     exit;
 }
@@ -72,25 +72,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nome = $_POST['nome'];
             $email = $_POST['email'];
             $contacto = $_POST['contacto'];
-            $data_inicio = $_POST['data_inicio'];
-            $data_fim = $_POST['data_fim'];
 
-            $sql = "UPDATE reservas SET nome = ?, email = ?, contacto = ?, data_inicio = ?, data_fim = ? WHERE id_reserva = ?";
+            $sql = "UPDATE reservas SET nome = ?, email = ?, contacto = ? WHERE id_reserva = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssssi", $nome, $email, $contacto, $data_inicio, $data_fim, $id_reserva);
+            $stmt->bind_param("sssi", $nome, $email, $contacto, $id_reserva);
             $stmt->execute();
             $stmt->close();
 
             // Registar log
-            $descricao = "Reserva com ID {$id_reserva} foi editada: Nome: {$nome}, Email: {$email}, Contacto: {$contacto}, Data Início: {$data_inicio}, Data Fim: {$data_fim}.";
+            $descricao = "Reserva com ID {$id_reserva} foi editada: Nome: {$nome}, Email: {$email}, Contacto: {$contacto}.";
             registarLog($conn, $id_utilizador, 'Editar', $descricao);
         }
     }
 }
 
 // Consulta as reservas
-$sql = "
-    SELECT r.id_reserva, r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, 
+$sql = "SELECT r.id_reserva, r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, 
            r.metodo_pagamento, r.preco_total, r.data_registo, c.marca, c.modelo
     FROM reservas r
     LEFT JOIN carros c ON r.id_carro = c.id_carro
@@ -112,7 +109,7 @@ $result = $conn->query($sql);
     <aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
-                <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
@@ -133,23 +130,19 @@ $result = $conn->query($sql);
                         <th>Contacto</th>
                         <th>Data Início</th>
                         <th>Data Fim</th>
-                        <th>Método Pagamento</th>
                         <th>Veículo</th>
-                        <th>Preço Total</th>
-                        <th>Data Registo</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <form method="post">
+                    <form method="post">
                             <td><input type="text" name="nome" value="<?php echo htmlspecialchars($row['nome']); ?>" required></td>
                             <td><input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>" required></td>
                             <td><input type="text" name="contacto" value="<?php echo htmlspecialchars($row['contacto']); ?>" required></td>
-                            <td><input type="date" name="data_inicio" value="<?php echo htmlspecialchars($row['data_inicio']); ?>" required></td>
-                            <td><input type="date" name="data_fim" value="<?php echo htmlspecialchars($row['data_fim']); ?>" required></td>
-                            <td><?php echo htmlspecialchars($row['metodo_pagamento']); ?></td>
+                            <td><?php echo htmlspecialchars($row['data_inicio']); ?></td>
+                            <td><?php echo htmlspecialchars($row['data_fim']); ?></td>
                             <td>
                                 <?php 
                                 if (isset($row['marca']) && isset($row['modelo'])) {
@@ -159,8 +152,6 @@ $result = $conn->query($sql);
                                 }
                                 ?>
                             </td>
-                            <td><?php echo htmlspecialchars($row['preco_total']); ?></td>
-                            <td><?php echo htmlspecialchars($row['data_registo']); ?></td>
                             <td>
                                 <input type="hidden" name="id_reserva" value="<?php echo $row['id_reserva']; ?>">
                                 <button type="submit" name="action" value="editar">Guardar</button>

@@ -1,3 +1,22 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+footer {
+  margin: 0;
+  padding: 0;
+}
+
+.container-principal {
+  min-height: 100vh; /* Garante que o conteúdo ocupa a tela inteira */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
 /* ----------------------------------------------------------------------------- */
 
 /* Informative Section */

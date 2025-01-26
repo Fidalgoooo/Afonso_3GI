@@ -16,8 +16,8 @@
             <div id="dropdownMenu" class="dropdown-menu">
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</span>
                 <!-- Mostrar o botão do painel de administração apenas se for admin -->
-                <?php if (isset($_SESSION['user_permission']) && $_SESSION['user_permission'] === 'adm'): ?>
-                    <a href="admin/dashboard.php" class="admin-btn">Admin</a>
+                <?php if (isset($_SESSION['user_permission']) && ($_SESSION['user_permission'] === 'adm' || $_SESSION['user_permission'] === 'chiefadmin')): ?>
+                    <a href="admin/index.php" class="admin-btn">Dashboard</a>
                 <?php endif; ?>
                 <a href="logout.php" class="logout-btn">Logout</a>
             </div>

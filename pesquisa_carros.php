@@ -67,7 +67,18 @@ $result = $stmt->get_result();
         <p>Datas: <?= htmlspecialchars($data_retirada ?? 'Não especificada') ?> a <?= htmlspecialchars($data_devolucao ?? 'Não especificada') ?></p>
         
         <div>
-            <?php while ($carro = $result->fetch_assoc()): ?>
+            <?php
+            // Cálculo da diferença de dias entre as datas
+            $data_retirada_obj = new DateTime($data_retirada ?? 'now');
+            $data_devolucao_obj = new DateTime($data_devolucao ?? 'now');
+            $diferenca_dias = $data_retirada_obj->diff($data_devolucao_obj)->days;
+
+            // Garantir pelo menos 1 dia, mesmo que as datas sejam iguais
+            $diferenca_dias = max($diferenca_dias, 1);
+
+            // Loop pelos carros disponíveis
+            while ($carro = $result->fetch_assoc()):
+            ?>
             <div class="car-card">
                 <img src="<?php echo $carro['imagem']; ?>" alt="<?php echo $carro['marca'] . ' ' . $carro['modelo']; ?>" class="car-image">
                 <div class="car-details">
@@ -87,7 +98,7 @@ $result = $stmt->get_result();
                 <div class="price-section">
                     <p class="price-label">DESDE</p>
                     <h2 class="price-per-day"><?php echo number_format($carro['preco_dia'], 2, ',', ' '); ?> € / dia</h2>
-                    <small class="total-price">TOTAL <?php echo number_format($carro['preco_dia'] * 6, 2, ',', ' '); ?> €</small>
+                    <small class="total-price">TOTAL <?php echo number_format($carro['preco_dia'] * $diferenca_dias, 2, ',', ' '); ?> €</small>
                     <a 
                         href="detalhes_carro.php?id=<?= $carro['id_carro'] ?>&data_retirada=<?= htmlspecialchars($data_retirada) ?>&data_devolucao=<?= htmlspecialchars($data_devolucao) ?>" 
                         class="btn-reserve"
@@ -99,7 +110,5 @@ $result = $stmt->get_result();
             <?php endwhile; ?>
         </div>
     </div>
-    
 </body>
 </html>
-
