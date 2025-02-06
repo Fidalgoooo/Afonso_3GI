@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Consulta as reservas
 $sql = "SELECT r.id_reserva, r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, 
-           r.metodo_pagamento, r.preco_total, r.data_registo, c.marca, c.modelo
+           r.metodo_pagamento, r.preco_total, r.data_registo, r.codigo_reserva, c.marca, c.modelo
     FROM reservas r
     LEFT JOIN carros c ON r.id_carro = c.id_carro
 ";
@@ -128,9 +128,10 @@ $result = $conn->query($sql);
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Contacto</th>
-                        <th>Data Início</th>
-                        <th>Data Fim</th>
+                        <th>Início</th>
+                        <th>Fim</th>
                         <th>Veículo</th>
+                        <th>Reserva</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -151,6 +152,7 @@ $result = $conn->query($sql);
                                     echo "Veículo não associado";
                                 }
                                 ?>
+                            <td><?php echo htmlspecialchars($row['codigo_reserva']); ?></td>
                             </td>
                             <td>
                                 <input type="hidden" name="id_reserva" value="<?php echo $row['id_reserva']; ?>">

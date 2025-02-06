@@ -1,17 +1,4 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!isset($_SESSION['dados_reserva'])) {
-    die("Erro: Dados da reserva não encontrados em criar-pagamento.php.");
-}
-
-// Depurar os dados
-echo "<pre>";
-print_r($_SESSION['dados_reserva']);
-echo "</pre>";
-
 require 'vendor/autoload.php'; // Carregar o autoloader do Composer
 include 'paypal-config.php';  // Incluir a configuração do PayPal
 

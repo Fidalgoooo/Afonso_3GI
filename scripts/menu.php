@@ -6,6 +6,7 @@
     <a href="index.php">Início</a>
     <a href="sobre.php">Sobre Nós</a>
     <a href="contacto.php">Contactos</a>
+    <a href="consulta.php">Gerir Reserva</a>
   </nav>
 
   <!-- Verifica se o utilizador está logado -->

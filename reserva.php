@@ -80,13 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
 
         // Avançar para a próxima etapa
-        $_SESSION['etapa'] = 2;
-        header("Location: reserva.php");
-        exit;
-    } elseif ($etapa === 2) {
-        // Processar dados da etapa 2
-        $_SESSION['metodo_pagamento'] = $_POST['metodo_pagamento'];
-        $_SESSION['etapa'] = 3; // Avançar para a próxima etapa
+        $_SESSION['etapa'] = 3;
         header("Location: reserva.php");
         exit;
     } elseif ($etapa === 3) {
@@ -173,14 +167,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <button type="submit">Próximo</button>
-            </form>
-
-        <?php elseif ($etapa === 2): ?>
-            <form method="POST">
-                <h3>Método de Pagamento</h3>
-                <p>O único método de pagamento disponível é o <strong>PayPal</strong>. Será redirecionado para efetuar o pagamento.</p>
-                <input type="hidden" name="metodo_pagamento" value="PayPal">
                 <button type="submit">Próximo</button>
             </form>
 

@@ -70,15 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_user = intval($_POST['id_utilizador']);
             $nome = $_POST['nome'];
             $email = $_POST['email'];
-            $permissao = $_POST['permissao'];
+            // $permissao = $_POST['permissao'];
 
-            $sql = "UPDATE utilizadores SET nome = ?, email = ?, permissao = ? WHERE id_utilizador = ?";
+            $sql = "UPDATE utilizadores SET nome = ?, email = ? WHERE id_utilizador = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssi", $nome, $email, $permissao, $id_user);
+            $stmt->bind_param("ssi", $nome, $email, $id_user);
 
             if ($stmt->execute()) {
                 $message = "Utilizador atualizado com sucesso.";
-                $descricao = "Utilizador com ID $id_user atualizado: Nome: $nome, Email: $email, Permissão: $permissao.";
+                $descricao = "Utilizador com ID $id_user atualizado: Nome: $nome, Email: $email.";
                 registarLog($conn, $id_utilizador, 'Editar', $descricao);
             } else {
                 $message = "Erro ao atualizar o utilizador.";
@@ -137,7 +137,7 @@ $result = $conn->query($sql);
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
-                        <th>Permissão</th>
+                        <!-- <th>Permissão</th> -->
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -147,7 +147,7 @@ $result = $conn->query($sql);
                         <form method="post">
                             <td><input type="text" name="nome" value="<?php echo htmlspecialchars($row['nome']); ?>"></td>
                             <td><input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>"></td>
-                            <td><?php echo htmlspecialchars($row['permissao']); ?></td>
+                            <!-- <td><?php echo htmlspecialchars($row['permissao']); ?></td> -->
 
                             <td>
                                 <input type="hidden" name="id_utilizador" value="<?php echo $row['id_utilizador']; ?>">

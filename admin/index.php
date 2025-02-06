@@ -25,27 +25,35 @@ $bookings_result = mysqli_fetch_assoc(mysqli_query($conn, $bookings_query))['tot
 $faturamento_query = "
     SELECT MONTH(data_registo) AS mes, SUM(preco_total) AS faturamento
     FROM reservas
-    WHERE MONTH(data_registo) BETWEEN 1 AND 6 AND YEAR(data_registo) = YEAR(CURDATE())
+    WHERE MONTH(data_registo) BETWEEN 1 AND 7 AND YEAR(data_registo) = YEAR(CURDATE())
     GROUP BY MONTH(data_registo)
 ";
 $faturamento_result = mysqli_query($conn, $faturamento_query);
 
 // Inicializa o faturamento com 0 para os meses do primeiro semestre
-$faturamentoSemestre = array_fill(1, 6, 0);
+$faturamentoSemestre = array_fill(1, 7, 0);
 
 while ($row = mysqli_fetch_assoc($faturamento_result)) {
     $faturamentoSemestre[(int)$row['mes']] = (float)$row['faturamento'];
 }
 
 // Calcula veículos ocupados e disponíveis
-$ocupados_query = "SELECT COUNT(*) as total FROM reservas WHERE data_fim >= NOW()";
-$ocupados_result = mysqli_fetch_assoc(mysqli_query($conn, $ocupados_query))['total'] ?? 0;
+$ocupados_query = "SELECT COUNT(DISTINCT id_carro) as total_ocupados 
+                   FROM reservas 
+                   WHERE data_inicio AND data_fim";
+                   
+$ocupados_result = mysqli_fetch_assoc(mysqli_query($conn, $ocupados_query))['total_ocupados'] ?? 0;
+
+
+$total_carros_query = "SELECT COUNT(*) as total FROM carros";
+$total_carros_result = mysqli_fetch_assoc(mysqli_query($conn, $total_carros_query))['total'] ?? 0;
+
 
 $total_veiculos = $vehicles_result;
 $disponiveis = $total_veiculos - $ocupados_result;
 
 // Meses do primeiro semestre
-$mesesSemestre = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho"];
+$mesesSemestre = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho"];
 
 // Envia os dados para o JavaScript
 echo '<script>
@@ -75,6 +83,9 @@ echo '<script>
 </head>
 <body>
     <div class="container">
+    <div class="top-right">
+        <a href="../index.php" class="view-site-btn"><i class="fas fa-eye"></i>Ver Site</a>
+    </div>
     <aside class="sidebar">
         <h2>Admin Panel</h2>
             <ul>
@@ -145,8 +156,7 @@ echo '<script>
         </thead>
         <tbody>
             <?php
-            $query = "
-                SELECT r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, r.metodo_pagamento, 
+            $query = "SELECT r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, r.metodo_pagamento, 
                        r.preco_total, r.data_registo, c.marca, c.modelo
                 FROM reservas r
                 JOIN carros c ON r.id_carro = c.id_carro

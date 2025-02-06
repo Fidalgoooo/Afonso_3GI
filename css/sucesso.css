@@ -1,0 +1,76 @@
+body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .success-message {
+            font-size: 18px;
+            color: #28a745;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .details p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .details p span {
+            font-weight: 400;
+            color: #555;
+        }
+
+        .btn {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            background: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
