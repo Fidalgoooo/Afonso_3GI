@@ -105,8 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'preco_total' => $preco_total ?? 0 // Certifica-te de que esta variável está calculada
         ];
         
-        
-    
         // Redirecionar para o PayPal
         
         header("Location: criar-pagamento.php");
@@ -115,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">

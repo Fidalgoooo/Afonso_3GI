@@ -1,5 +1,6 @@
 <?php
 require 'db.php'; // Inclui a conexão ao banco de dados
+include './scripts/menu.php';
 
 $reserva = null; // Inicializa a variável da reserva
 $error = null; // Inicializa a variável para mensagens de erro
@@ -39,23 +40,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultar Reserva</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="css/consulta.css">
+
 </head>
 <body>
-    <div class="container">
-        <h1>Consultar Reserva</h1>
+<div class="consulta-reserva-wrapper">
+    <div class="reserva-container">
+        <h2>Consultar Reserva</h2>
         <form method="POST">
-            <input type="text" name="codigo_reserva" placeholder="Digite o código da reserva" required>
-            <button type="submit">Consultar</button>
+            <input type="text" name="codigo_reserva" placeholder="Insira o código da reserva" required>
+            <button type="submit">Verificar</button>
         </form>
 
-        <?php if (isset($error)): ?>
+        <?php if ($error): ?>
             <p class="error"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
 
-        <?php if (isset($reserva)): ?>
-            <div class="details">
+        <?php if ($reserva): ?>
+            <div class="success">
                 <p><strong>Nome:</strong> <?php echo htmlspecialchars($reserva['nome']); ?></p>
                 <p><strong>Email:</strong> <?php echo htmlspecialchars($reserva['email']); ?></p>
                 <p><strong>Contacto:</strong> <?php echo htmlspecialchars($reserva['contacto']); ?></p>
@@ -66,5 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
     </div>
+</div>
+    <div>
+        <?php include './scripts/footer.php'; ?>
+    </div>
 </body>
 </html>
+

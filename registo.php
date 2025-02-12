@@ -5,30 +5,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitização dos dados
     $nome = trim($_POST['nome']);
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-    $password = password_hash(trim($_POST['password']), PASSWORD_BCRYPT); // Hash seguro para a senha
+    $password = password_hash(trim($_POST['password']), PASSWORD_BCRYPT);
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = "Por favor, insira um email válido.";
+        die("Erro: Email inválido.");
+    }
+
+    // Verifica se o email já existe
+    $sql_check = "SELECT * FROM utilizadores WHERE email = ?";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param('s', $email);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    if ($result_check->num_rows > 0) {
+        die("Erro: O email já está registado.");
     } else {
-        // Verifica se o email já existe
-        $sql_check = "SELECT * FROM utilizadores WHERE email = ?";
-        $stmt_check = $conn->prepare($sql_check);
-        $stmt_check->bind_param('s', $email);
-        $stmt_check->execute();
-        $result_check = $stmt_check->get_result();
+        // Insere o utilizador na base de dados
+        $sql_insert = "INSERT INTO utilizadores (nome, email, password) VALUES (?, ?, ?)";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bind_param('sss', $nome, $email, $password);
 
-        if ($result_check->num_rows > 0) {
-            $error = "Houve um problema com o registro. Verifique suas informações.";
-        } else {
-            // Insere o utilizador na base de dados
-            $sql_insert = "INSERT INTO utilizadores (nome, email, password) VALUES (?, ?, ?)";
-            $stmt_insert = $conn->prepare($sql_insert);
-            $stmt_insert->bind_param('sss', $nome, $email, $password);
+        if ($stmt_insert->execute()) {
+            // Obter o email do utilizador inserido
+            $sql_get_user = "SELECT email FROM utilizadores WHERE email = ?";
+            $stmt_get_user = $conn->prepare($sql_get_user);
+            $stmt_get_user->bind_param('s', $email);
+            $stmt_get_user->execute();
+            $result_user = $stmt_get_user->get_result();
+            $user_data = $result_user->fetch_assoc();
+            $to = $user_data['email'];
 
-            if ($stmt_insert->execute()) {
-                $success = "Registo concluído com sucesso! Pode iniciar sessão.";
-            } else {
-                $error = "Erro ao registar o utilizador.";
+            // Enviar email de confirmação
+            $subject = "Confirmação de Registo - Sprint Car";
+            $message = file_get_contents('./email/email_registo.html');
+
+            if ($message !== false) {
+                // Substituir placeholders pelos dados reais
+                $message = str_replace('{$nome}', $nome, $message);
+                $message = str_replace('{$email}', $to, $message);
+
+                $headers = "From: no-reply@sprintcar.com\r\n";
+                $headers .= "Reply-To: suporte@sprintcar.com\r\n";
+                $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+
+                mail($to, $subject, $message, $headers);
             }
         }
     }

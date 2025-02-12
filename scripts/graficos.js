@@ -10,7 +10,7 @@ new Chart(document.getElementById('usersChart'), {
     }
 });
 
-// Gráfico Gauge (com dados reais)
+// Gráfico Gauge
 new Chart(document.getElementById('gaugeChart'), {
     type: 'doughnut',
     data: {
@@ -34,7 +34,6 @@ new Chart(document.getElementById('gaugeChart'), {
         }
     }
 });
-
 
 // Configuração do Gráfico
 const ctx = document.getElementById('revenueChart').getContext('2d');

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #0044ff, #007bff);
+            color: #fff;
+            text-align: center;
+            padding: 25px;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .body {
+            padding: 25px;
+        }
+
+        .body h1 {
+            font-size: 22px;
+            color: #0044ff;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            background-color: #f9f9f9;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .details p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .details p strong {
+            color: #333;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            display: inline-block;
+            background-color: #0044ff;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0, 68, 255, 0.3);
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container a:hover {
+            background-color: #0033cc;
+        }
+
+        .footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            Confirmação de Login
+        </div>
+        <!-- Corpo -->
+        <div class="body">
+            <h1>Olá, {$nome},</h1>
+            <p>Confirmamos que a sua conta foi acessada recentemente.</p>
+            <div class="details">
+                <p><strong>Nome do Utilizador:</strong> {$nome}</p>
+                <p><strong>Email:</strong> {$email}</p>
+            </div>
+            <p>Se não reconhece este login, altere imediatamente a sua palavra-passe.</p>
+            <div class="button-container">
+                <a href="http://localhost/pap/Afonso_3GI/alterar_password.php">Alterar Palavra-passe</a>
+            </div>
+        </div>
+        <!-- Rodapé -->
+        <div class="footer">
+            &copy; 2025 Sprintcar | <a href="mailto:suporte@sprintcar.com">suporte@sprintcar.com</a>
+        </div>
+    </div>
+</body>
+</html>

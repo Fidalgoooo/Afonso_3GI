@@ -1,49 +1,60 @@
-<?php
-// sobre.php - Página sobre a empresa
-include './scripts/menu.php'; // Incluir o header
-?>
-<link rel="stylesheet" href="css/sobre.css">
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página em Desenvolvimento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+            margin: 0;
+        }
 
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
 
-<main>
-    <section class="sobre">
-        <div class="container">
-            <h1 class="titulo">Sobre Nós</h1>
-            <p class="descricao">
-                Bem-vindo ao nosso serviço de aluguer de carros. Com anos de experiência, 
-                oferecemos soluções de mobilidade de confiança e de alta qualidade para os nossos clientes.
-            </p>
+        p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
 
-            <div class="conteudo-sobre">
-                <div class="missao">
-                    <h2>A Nossa Missão</h2>
-                    <p>
-                        Proporcionar uma experiência de aluguer de carros simples, acessível e confiável, 
-                        assegurando a máxima satisfação dos nossos clientes.
-                    </p>
-                </div>
-                <div class="missao">
-                    <h2>Os Nossos Valores</h2>
-                    <ul>
-                        <li>Compromisso com a qualidade.</li>
-                        <li>Respeito pelo cliente.</li>
-                        <li>Inovação constante.</li>
-                    </ul>
-                </div>
-            </div>
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #2575fc;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
 
-            <div class="experiencia">
-                <h2>Nossa Experiência</h2>
-                <p>
-                    Com anos de atuação no mercado, acumulamos vasta experiência no setor de mobilidade.
-                    Nossa equipe é formada por especialistas que garantem um atendimento de qualidade, 
-                    oferecendo soluções que atendem às diversas necessidades dos nossos clientes.
-                </p>
-            </div>
-        </div>
-    </section>
-</main>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-<?php
-include './scripts/footer.php'; // Incluir o footer
-?>
+        footer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1em;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Esta Página Está em Desenvolvimento</h1>
+    <p>Aguarde um momento, estamos a trabalhar para trazer algo incrível!</p>
+    <div class="spinner"></div>
+    <footer>
+        © 2024 Todos os direitos reservados.
+    </footer>
+</body>
+</html>

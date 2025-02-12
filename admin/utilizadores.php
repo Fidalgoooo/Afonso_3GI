@@ -137,7 +137,6 @@ $result = $conn->query($sql);
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
-                        <!-- <th>Permissão</th> -->
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -147,8 +146,6 @@ $result = $conn->query($sql);
                         <form method="post">
                             <td><input type="text" name="nome" value="<?php echo htmlspecialchars($row['nome']); ?>"></td>
                             <td><input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>"></td>
-                            <!-- <td><?php echo htmlspecialchars($row['permissao']); ?></td> -->
-
                             <td>
                                 <input type="hidden" name="id_utilizador" value="<?php echo $row['id_utilizador']; ?>">
                                 <button type="submit" name="action" value="editar">Guardar</button>
