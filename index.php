@@ -21,7 +21,7 @@ session_start();
     <a href="index.php">Início</a>
     <a href="sobre.php">Sobre Nós</a>
     <a href="contacto.php">Contactos</a>
-    <a href="consulta.php">Gerir Reserva</a>
+    <a href="consulta.php">Consultar Reserva</a>
   </nav>
 
   <!-- Verifica se o utilizador está logado -->
@@ -33,7 +33,10 @@ session_start();
                 <span>Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</span>
                 <!-- Mostrar o botão do painel de administração apenas se for admin -->
                 <?php if (isset($_SESSION['user_permission']) && ($_SESSION['user_permission'] === 'adm' || $_SESSION['user_permission'] === 'chiefadmin')): ?>
-                    <a href="../Afonso_3GI/admin/index.php" class="admin-btn">Admin</a>
+                    <a href="admin/index.php" class="admin-btn">Dashboard</a>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['user_permission']) && ($_SESSION['user_permission'] === 'utilizador')): ?>
+                    <a href="cliente/index.php" class="admin-btn">Painel</a>
                 <?php endif; ?>
                 <a href="logout.php" class="logout-btn">Logout</a>
             </div>
@@ -52,8 +55,6 @@ session_start();
     <h1>Aluguer de Carros - Pesquise, Compare e Poupe</h1>
     <ul class="benefits-list">
       <li><i class="fas fa-check-circle"></i> Cancelamento gratuito na maioria das reservas</li>
-      <li><i class="fas fa-check-circle"></i> Mais de 60 000 localizações</li>
-      <li><i class="fas fa-check-circle"></i> Apoio ao cliente em mais de 30 idiomas</li>
     </ul>
   </div>
   </section>

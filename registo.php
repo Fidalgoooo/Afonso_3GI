@@ -1,11 +1,16 @@
 <?php
 include 'db.php'; // Conexão com a base de dados
 
+function gerarCodigoIndicacao($tamanho = 8) {
+    return strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, $tamanho));
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitização dos dados
     $nome = trim($_POST['nome']);
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $password = password_hash(trim($_POST['password']), PASSWORD_BCRYPT);
+    $codigo_indicacao = gerarCodigoIndicacao();
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         die("Erro: Email inválido.");
@@ -21,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result_check->num_rows > 0) {
         die("Erro: O email já está registado.");
     } else {
-        // Insere o utilizador na base de dados
-        $sql_insert = "INSERT INTO utilizadores (nome, email, password) VALUES (?, ?, ?)";
+        // Insere o utilizador na base de dados com código de indicação
+        $sql_insert = "INSERT INTO utilizadores (nome, email, password, codigo_indicacao) VALUES (?, ?, ?, ?)";
         $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param('sss', $nome, $email, $password);
+        $stmt_insert->bind_param('ssss', $nome, $email, $password, $codigo_indicacao);
 
         if ($stmt_insert->execute()) {
             // Obter o email do utilizador inserido
@@ -38,12 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Enviar email de confirmação
             $subject = "Confirmação de Registo - Sprint Car";
-            $message = file_get_contents('./email/email_registo.html');
+            $message = file_get_contents(filename: './email/email_registo.html');
 
             if ($message !== false) {
                 // Substituir placeholders pelos dados reais
                 $message = str_replace('{$nome}', $nome, $message);
                 $message = str_replace('{$email}', $to, $message);
+                // $message = str_replace('{$codigo_indicacao}', $codigo_indicacao, $message);
 
                 $headers = "From: no-reply@sprintcar.com\r\n";
                 $headers .= "Reply-To: suporte@sprintcar.com\r\n";

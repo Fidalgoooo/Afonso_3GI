@@ -6,7 +6,7 @@
     <a href="index.php">Início</a>
     <a href="sobre.php">Sobre Nós</a>
     <a href="contacto.php">Contactos</a>
-    <a href="consulta.php">Gerir Reserva</a>
+    <a href="consulta.php">Consultar Reserva</a>
   </nav>
 
   <!-- Verifica se o utilizador está logado -->
@@ -19,6 +19,9 @@
                 <!-- Mostrar o botão do painel de administração apenas se for admin -->
                 <?php if (isset($_SESSION['user_permission']) && ($_SESSION['user_permission'] === 'adm' || $_SESSION['user_permission'] === 'chiefadmin')): ?>
                     <a href="admin/index.php" class="admin-btn">Dashboard</a>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['user_permission']) && ($_SESSION['user_permission'] === 'utilizador')): ?>
+                    <a href="cliente/index.php" class="admin-btn">Painel</a>
                 <?php endif; ?>
                 <a href="logout.php" class="logout-btn">Logout</a>
             </div>

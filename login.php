@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>
 
             <p class="forgot-password">
-                <a href="recover_password.php">Esqueceu sua senha?</a>
+                <a href="recuperar_pw.php">Esqueceu sua senha?</a>
             </p>
             <p class="login-link">
                 Não tem conta? <a href="registo.php">Crie Agora</a>

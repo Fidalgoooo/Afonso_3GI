@@ -1,5 +1,4 @@
 /* Estilo Global */
-/* Estilo Global */
 body {
     margin: 0;
     padding: 0;
@@ -10,7 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    position: relative; /* Necessário para o pseudo-elemento funcionar */
+    position: relative;
     overflow: hidden;
 }
 
@@ -21,8 +20,8 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Sobreposição escura (ajuste a opacidade) */
-    z-index: 1; /* Coloca o overlay atrás do conteúdo */
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
 }
 
 .register-container {
@@ -31,10 +30,9 @@ body::before {
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     width: 400px;
-    z-index: 2; /* Coloca o container à frente da sobreposição */
+    z-index: 2;
     position: relative;
 }
-
 
 .form-title {
     font-size: 1.8rem;
@@ -44,25 +42,19 @@ body::before {
     text-shadow: 0 0 5px #99ccff;
 }
 
-.register-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* Inputs */
 .input-group {
     display: flex;
     flex-direction: column;
+    margin-bottom: 15px;
 }
 
-.input-label {
+label {
     font-size: 0.9rem;
     margin-bottom: 5px;
     color: #666;
 }
 
-.input-field {
+input[type="email"] {
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -71,7 +63,15 @@ body::before {
     font-size: 1rem;
 }
 
-/* Botão */
+input[type="password"] {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #333;
+    font-size: 1rem;
+}
+
 .btn-submit {
     padding: 15px;
     border: none;
@@ -79,16 +79,18 @@ body::before {
     font-size: 1rem;
     font-weight: bold;
     text-transform: uppercase;
-    background: linear-gradient(135deg, #007bff, #00d4ff);    color: white;
+    background: linear-gradient(120deg, #3366cc, #6699ff);
+    color: white;
     cursor: pointer;
     transition: 0.3s;
+    display: block;
+    margin: 0 auto;
 }
 
 .btn-submit:hover {
     background: linear-gradient(120deg, #6699ff, #3366cc);
 }
 
-/* Mensagens */
 .error-message {
     color: #ff4d4d;
     text-align: center;

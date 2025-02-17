@@ -20,10 +20,10 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 250px;
+    width: 249px;
     background: #2c3e50;
     color: #ecf0f1;
-    padding: 20px;
+    padding: 19px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -31,8 +31,8 @@ body {
 
 .sidebar h2 {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 22px;
+    margin-bottom: 19px;
+    font-size: 21px;
 }
 
 .sidebar ul {
@@ -45,7 +45,7 @@ body {
 }
 
 .sidebar ul li {
-    margin: 15px 0;
+    margin: 14px 0;
 }
 
 .sidebar ul li a {
@@ -53,16 +53,17 @@ body {
     color: #ecf0f1;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    padding: 10px 5px;
-    border-radius: 5px;
+    gap: 9px;
+    font-size: 15px;
+    padding: 9px 4px;
+    border-radius: 4px;
     transition: background-color 0.3s;
 }
 
 .sidebar ul li a:hover {
     background-color: #34495e;
 }
+
 
 /* Dashboard */
 main.dashboard {

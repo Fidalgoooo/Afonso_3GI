@@ -5,81 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Footer SprintCar</title>
     <style>
-        /* Estilo do footer */
+        /* Footer mais compacto */
         .footer {
-            background-color: #333;
-            color: white;
-            padding: 20px;
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            padding: 20px 15px; /* Reduzi o padding para diminuir altura */
             text-align: center;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
         }
 
         .footer-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            max-width: 1200px;
+            max-width: 800px; /* Reduzi a largura para ocupar menos espaço */
             margin: 0 auto;
         }
 
-        .footer-section {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px;
+        /* Contato */
+        .footer-contact {
+            font-size: 14px; /* Fonte menor para economizar espaço */
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
-        .footer-section h3 {
-            margin-bottom: 10px;
-            color: #f4a261;
-        }
-
-        .footer-section p, .footer-section a {
-            font-size: 14px;
-            color: #ccc;
+        .footer-contact a {
+            display: block;
+            color: inherit;
             text-decoration: none;
+            margin-bottom: 3px; /* Menos espaço entre links */
         }
 
-        .footer-section a:hover {
-            color: #fff;
+        /* Descrição */
+        .footer-description {
+            font-size: 13px; /* Reduzi um pouco a fonte */
+            font-style: italic;
+            margin-bottom: 10px;
         }
 
+        /* Linha divisória */
+        .footer-divider {
+            width: 70%;
+            height: 1px;
+            background-color: #ffffff;
+            margin: 15px auto; /* Menos margem para economizar espaço */
+        }
+
+        /* Copyright e links */
         .footer-bottom {
-            margin-top: 20px;
-            border-top: 1px solid #444;
-            padding-top: 10px;
             font-size: 12px;
-            color: #aaa;
+        }
+
+        .footer-bottom a {
+            color: inherit;
+            text-decoration: none;
+            margin: 0 8px;
         }
     </style>
 </head>
 <body>
-    <main class="content">
-    </main>
 
     <footer class="footer">
         <div class="footer-container">
-            <div class="footer-section">
-                <h3>SprintCar</h3>
-                <p>O seu parceiro de confiança para aluguer de carros em Portugal.</p>
+            <div class="footer-contact">
+                <a href="mailto:info@sprintcar.com">info@sprintcar.com</a>
+                <a href="tel:+351914667382">+351 914 667 382</a>
             </div>
-            <div class="footer-section">
-                <h3>Contactos</h3>
-                <p><strong>Endereço:</strong> Avenida Central, Lisboa</p>
-                <p><strong>Email:</strong> <a href="mailto:info@sprintcar.com">info@sprintcar.com</a></p>
-                <p><strong>Telefone:</strong> +351 123 456 789</p>
+
+            <div class="footer-description">
+                O seu parceiro de confiança para aluguer de carros em Portugal.
             </div>
-            <div class="footer-section">
-                <h3>Links Rápidos</h3>
-                <ul>
-                    <li><a href="index.php">Início</a></li>
-                    <li><a href="sobre.php">Sobre Nós</a></li>
-                    <li><a href="contacto.php">Contactos</a></li>
-                    <li><a href="#">Política de Privacidade</a></li>
-                </ul>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                © 2025 SprintCar. Todos os direitos reservados. <br>
+                <a href="sobre.php">Sobre</a> | 
+                <a href="contacto.php">Contacto</a> | 
+                <a href="consulta.php">Consultar Reserva</a>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 SprintCar. Todos os direitos reservados.</p>
         </div>
     </footer>
+
 </body>
 </html>

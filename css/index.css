@@ -21,7 +21,7 @@ footer {
 
 /* Informative Section */
 .informative-section {
-  background-color: #007bff; /* Cor de fundo azul para a secção */
+  background: linear-gradient(135deg, #007bff, #00d4ff);
   color: #fff; /* Cor do texto em branco */
   padding: 40px 20px; /* Espaçamento interior */
   text-align: center; /* Centraliza o conteúdo */
@@ -155,7 +155,7 @@ footer {
 /* Estilo para o botão */
 .hero-form button.btn-secondary {
   padding: 10px 20px; /* Espaçamento interno do botão */
-  background: #28a745; /* Cor de fundo verde */
+  background: linear-gradient(135deg, #007bff, #00d4ff);
   color: #fff; /* Cor do texto branco */
   border: none; /* Remove a borda */
   border-radius: 5px; /* Cantos arredondados */
@@ -168,7 +168,7 @@ footer {
 
 /* Estilo para o botão ao passar o mouse */
 .hero-form button.btn-secondary:hover {
-  background: #218838; /* Muda a cor do fundo para um verde mais escuro */
+  background: linear-gradient(135deg, #007bff, #00d4ff);
 }
 
 /* Ajuste responsivo para telas pequenas */

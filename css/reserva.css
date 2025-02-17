@@ -81,8 +81,7 @@ form select:focus {
 form button {
     padding: 12px;
     font-size: 16px;
-    background: #007bff;
-    color: #fff;
+    background: linear-gradient(135deg, #007bff, #00d4ff);    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -92,8 +91,7 @@ form button {
 }
 
 form button:hover {
-    background: #0056b3;
-}
+    background: linear-gradient(135deg, #007bff, #00d4ff);}
 
 /* Organização dos campos */
 form .row {

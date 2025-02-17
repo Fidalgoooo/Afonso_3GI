@@ -194,5 +194,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div>
         <?php include './scripts/footer.php'; ?>
     </div>
+
+        <?php
+// Limpa variáveis de sessão relacionadas à reserva
+unset(
+    $_SESSION['etapa'],
+    $_SESSION['id_carro'],
+    $_SESSION['data_inicio'],
+    $_SESSION['data_fim'],
+    $_SESSION['nome'],
+    $_SESSION['email'],
+    $_SESSION['contacto'],
+    $_SESSION['metodo_pagamento'],
+    $_SESSION['dados_reserva'],
+    $_SESSION['reserva_sucesso']
+);
+?>
 </body>
 </html>

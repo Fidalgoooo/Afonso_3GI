@@ -91,7 +91,7 @@ body {
   display: inline-block;
   margin-top: 20px;
   padding: 15px 25px;
-  background-color: #6A5AE0;
+  background: linear-gradient(135deg, #007bff, #00d4ff);
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -100,7 +100,7 @@ body {
 }
 
 .button:hover {
-  background-color: #4C45B2;
+  background: linear-gradient(135deg, #007bff, #00d4ff);
 }
 
 .equipment {

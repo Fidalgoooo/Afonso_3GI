@@ -38,9 +38,10 @@ while ($row = mysqli_fetch_assoc($faturamento_result)) {
 }
 
 // Calcula veículos ocupados e disponíveis
-$ocupados_query = "SELECT COUNT(DISTINCT id_carro) as total_ocupados 
-                   FROM reservas 
-                   WHERE data_inicio AND data_fim";
+$ocupados_query = "SELECT COUNT(DISTINCT id_carro) AS total_ocupados 
+                FROM reservas 
+                WHERE CURDATE() BETWEEN data_inicio AND data_fim
+                AND status NOT IN ('Finalizada', 'Cancelada');";
                    
 $ocupados_result = mysqli_fetch_assoc(mysqli_query($conn, $ocupados_query))['total_ocupados'] ?? 0;
 
@@ -94,6 +95,8 @@ echo '<script>
                 <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
                 <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
                 <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
+                <li><a href="admin_chat.php"><i class="fas fa-phone"></i> Chat</a></li>
+
 
                 <!-- Mostrar apenas para ChiefAdmin -->
                 <?php if (isset($_SESSION['user_permission']) && $_SESSION['user_permission'] === 'chiefadmin'): ?>
