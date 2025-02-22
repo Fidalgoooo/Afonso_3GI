@@ -27,12 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['mensagem'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat de Suporte</title>
+    <link rel="stylesheet" href="./css/cliente_chat.css">
     <script>
         function atualizarChat() {
             fetch('get_messages.php')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('chat-box').innerHTML = data;
+                let chatBox = document.getElementById('chat-box');
+                if (data.trim()) { // Apenas substitui se houver mensagens
+                    chatBox.innerHTML = data;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
             });
         }
         setInterval(atualizarChat, 3000); // Atualiza a cada 3 segundos
@@ -40,15 +45,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['mensagem'])) {
     </script>
 </head>
 <body>
-    <h3>Chat de Suporte</h3>
-    <div id="chat-box"></div>
+    <div class="chat-container">
+        <h3>Chat de Suporte</h3>
+        <div id="chat-box" class="chat-box">
+            <p class="chat-message admin"><strong>Admin:</strong> Bem-vindo ao suporte. Como posso ajudar? </p>
+        </div>
 
-    <form action="chat.php" method="POST">
-        <input type="text" name="mensagem" placeholder="Digite sua mensagem..." required>
-        <button type="submit">Enviar</button>
-    </form>
+        <form action="chat.php" method="POST" class="chat-form">
+            <input type="text" name="mensagem" class="chat-input" placeholder="Digite sua mensagem..." required>
+            <button type="submit" class="chat-button">Enviar</button>
+        </form>
 
-    <br>
-    <a href="index.php">Voltar</a>
+        <a href="index.php" class="back-link"> Voltar</a>
+    </div>
 </body>
 </html>
+

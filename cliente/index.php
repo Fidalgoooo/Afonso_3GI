@@ -15,14 +15,13 @@ if ($_SESSION['user_permission'] !== 'utilizador') {
 
 $id_utilizador = $_SESSION['user_id'];
 
-// ✅ Atualizar status das reservas que já terminaram
+// Atualizar status das reservas que já terminaram
 $update_stmt = $conn->prepare("UPDATE reservas SET status = 'Finalizada' WHERE id_utilizador = ? AND status = 'Confirmada' AND data_fim < CURDATE()");
 $update_stmt->bind_param("i", $id_utilizador);
 $update_stmt->execute();
 
-
 // Buscar dados do utilizador
-$utilizador_stmt = $conn->prepare("SELECT nome, email, foto_perfil, pontos_fidelidade, codigo_indicacao FROM utilizadores WHERE id_utilizador = ?");
+$utilizador_stmt = $conn->prepare("SELECT nome, email, foto_perfil FROM utilizadores WHERE id_utilizador = ?");
 $utilizador_stmt->bind_param("i", $id_utilizador);
 $utilizador_stmt->execute();
 $resultado = $utilizador_stmt->get_result();
@@ -73,16 +72,15 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
             <li onclick="mostrarSecao('reservas')">📅 Minhas Reservas</li>
             <li onclick="mostrarSecao('perfil')">👤 Editar Perfil</li>
             <li onclick="mostrarSecao('historico')">📜 Histórico de Reservas</li>
-            <li onclick="mostrarSecao('fidelidade')">🎁 Programa de Fidelidade</li>
+            <li><a href="chat.php">🎁 Suporte</a></li>
             <li onclick="mostrarSecao('avaliacoes')">⭐ Avaliações</li>
-            <li onclick="mostrarSecao('indicacoes')">👥 Indique um Amigo</li>
             <li><a href="../index.php">🚪 Sair</a></li>
         </ul>
     </div>
 
     <div class="content">
         <h2>Bem-vindo, <?php echo htmlspecialchars($utilizador['nome']); ?>!</h2>
-        <img src="../uploads/<?php echo $utilizador['foto_perfil'] ?: 'default.png'; ?>" alt="Foto de Perfil" class="perfil-img">
+        <img src="../uploads/<?php echo $utilizador['foto_perfil'] ?: '../img/user.jpg'; ?>" alt="Foto de Perfil" class="perfil-img">
 
         <div id="reservas" class="secao">
             <h3>Suas Reservas</h3>
@@ -115,20 +113,72 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
             </ul>
         </div>
 
-        <div id="fidelidade" class="secao" style="display: none;">
-            <h3>Programa de Fidelidade</h3>
-            <p>Você possui <strong><?php echo $utilizador['pontos_fidelidade']; ?></strong> pontos acumulados!</p>
-        </div>
-
         <div id="avaliacoes" class="secao" style="display: none;">
-            <h3>Avaliações</h3>
-            <p>Deixe sua opinião sobre nossos serviços e carros.</p>
+            <h3>Deixe uma Avaliação</h3>
+            
+            <form action="avaliar.php" method="POST">
+                <label for="id_carro">Carro:</label>
+                <select name="id_carro" required>
+                    <?php
+                    $carros_stmt = $conn->prepare("SELECT DISTINCT c.id_carro, CONCAT(c.marca, ' ', c.modelo) AS nome_carro 
+                                                FROM reservas r 
+                                                JOIN carros c ON r.id_carro = c.id_carro 
+                                                WHERE r.id_utilizador = ? AND r.status = 'Finalizada'");
+                    $carros_stmt->bind_param("i", $id_utilizador);
+                    $carros_stmt->execute();
+                    $carros_result = $carros_stmt->get_result();
+
+                    while ($carro = $carros_result->fetch_assoc()) {
+                        echo "<option value='{$carro['id_carro']}'>{$carro['nome_carro']}</option>";
+                    }
+                    ?>
+                </select>
+
+                <label for="avaliacao">Nota (1 a 5):</label>
+                <select name="avaliacao" required>
+                    <option value="1">1 - Péssimo</option>
+                    <option value="2">2 - Mau</option>
+                    <option value="3">3 - Normal</option>
+                    <option value="4">4 - Bom</option>
+                    <option value="5">5 - Excelente</option>
+                </select>
+
+                <label for="comentario">Comentário:</label>
+                <textarea name="comentario" required></textarea>
+
+                <button type="submit">Enviar Avaliação</button>
+            </form>
+
+            <h3>Suas Avaliações</h3>
+                <table>
+                    <tr>
+                        <th>Carro</th>
+                        <th>Nota</th>
+                        <th>Comentário</th>
+                        <th>Data</th>
+                    </tr>
+                    <?php
+                    $avaliacoes_stmt = $conn->prepare("SELECT c.marca, c.modelo, a.avaliacao, a.comentario, a.data_avaliacao 
+                                                    FROM avaliacoes a 
+                                                    JOIN carros c ON a.id_carro = c.id_carro 
+                                                    WHERE a.id_utilizador = ? ORDER BY a.data_avaliacao DESC");
+                    $avaliacoes_stmt->bind_param("i", $id_utilizador);
+                    $avaliacoes_stmt->execute();
+                    $avaliacoes_result = $avaliacoes_stmt->get_result();
+
+                    while ($avaliacao = $avaliacoes_result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$avaliacao['marca']} {$avaliacao['modelo']}</td>
+                                <td>{$avaliacao['avaliacao']} ⭐</td>
+                                <td>{$avaliacao['comentario']}</td>
+                                <td>{$avaliacao['data_avaliacao']}</td>
+                            </tr>";
+                    }
+                    ?>
+                </table>
+
         </div>
 
-        <div id="indicacoes" class="secao" style="display: none;">
-            <h3>Indique um Amigo</h3>
-            <p>Compartilhe seu código de indicação: <strong><?php echo $utilizador['codigo_indicacao']; ?></strong></p>
-        </div>
 
         <div id="perfil" class="secao" style="display: none;">
             <h3>Editar Conta</h3>

@@ -155,12 +155,14 @@ echo '<script>
                 <th>Veículo</th>
                 <th>Preço Total</th>
                 <th>Data Registo</th>
+                <th>Status</th>
+
             </tr>
         </thead>
         <tbody>
             <?php
             $query = "SELECT r.nome, r.email, r.contacto, r.data_inicio, r.data_fim, r.metodo_pagamento, 
-                       r.preco_total, r.data_registo, c.marca, c.modelo
+                       r.preco_total, r.data_registo ,r.status, c.marca, c.modelo
                 FROM reservas r
                 JOIN carros c ON r.id_carro = c.id_carro
             ";
@@ -177,7 +179,8 @@ echo '<script>
                         <td>{$row['metodo_pagamento']}</td>
                         <td>{$row['marca']} {$row['modelo']}</td>
                         <td>{$row['preco_total']}</td>
-                        <td>{$row['data_registo']}</td>
+                        <td>{$row['data_registo']}</td>                        
+                        <td>{$row['status']}</td>
                     </tr>";
                 }
             } else {

@@ -8,16 +8,50 @@ if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'a
     exit;
 }
 
-// Buscar mensagens de todos os clientes
-$msg_stmt = $conn->prepare("
-    SELECT sc.id, sc.cliente_id, u.nome AS cliente_nome, sc.mensagem, sc.enviado_por, sc.enviado_em 
-    FROM suporte_chat sc
-    JOIN utilizadores u ON sc.cliente_id = u.id_utilizador
-    ORDER BY sc.enviado_em ASC");
-$msg_stmt->execute();
-$msg_result = $msg_stmt->get_result();
-$mensagens = $msg_result->fetch_all(MYSQLI_ASSOC);
+// Buscar TODOS os utilizadores com permissão 'utilizador'
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_users'])) {
+    $stmt = $conn->query("SELECT id_utilizador AS id, nome FROM utilizadores WHERE permissao = 'utilizador'");
+
+    if (!$stmt) {
+        echo json_encode(["error" => $conn->error]); // Mostra erro no SQL se existir
+        exit;
+    }
+
+    $result = $stmt->fetch_all(MYSQLI_ASSOC);
+
+    if (empty($result)) {
+        echo json_encode(["error" => "Nenhum utilizador encontrado."]); // Caso não existam utilizadores
+        exit;
+    }
+
+    echo json_encode($result);
+    exit;
+}
+
+// Buscar mensagens do utilizador selecionado
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_messages']) && isset($_GET['cliente_id'])) {
+    $cliente_id = intval($_GET['cliente_id']);
+    $stmt = $conn->prepare("SELECT mensagem, enviado_por, enviado_em FROM suporte_chat WHERE cliente_id = ? ORDER BY enviado_em ASC");
+    $stmt->bind_param("i", $cliente_id);
+    $stmt->execute();
+    echo json_encode($stmt->get_result()->fetch_all(MYSQLI_ASSOC));
+    exit;
+}
+
+// Enviar mensagem
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['cliente_id'])) {
+    $cliente_id = intval($_POST['cliente_id']);
+    $mensagem = trim($_POST['mensagem']);
+
+    if (!empty($mensagem)) {
+        $stmt = $conn->prepare("INSERT INTO suporte_chat (cliente_id, mensagem, enviado_por) VALUES (?, ?, 'admin')");
+        $stmt->bind_param("is", $cliente_id, $mensagem);
+        $stmt->execute();
+    }
+    exit;
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -25,53 +59,60 @@ $mensagens = $msg_result->fetch_all(MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat de Suporte - Admin</title>
+    <link rel="stylesheet" href="admin_chat.css">
 </head>
 <body>
-    <h3>Painel de Suporte - Administrador</h3>
-    
-    <div id="chat-box">
-        <?php foreach ($mensagens as $msg): ?>
-            <p><strong><?php echo ($msg['enviado_por'] == 'cliente') ? $msg['cliente_nome'] : 'Admin'; ?>:</strong> 
-                <?php echo htmlspecialchars($msg['mensagem']); ?> 
-                <small>(<?php echo $msg['enviado_em']; ?>)</small>
-            </p>
-        <?php endforeach; ?>
+    <div class="chat-container">
+        <!-- Barra lateral com lista de utilizadores -->
+        <div class="user-list">
+            <h3>Utilizadores</h3>
+            <ul id="users"></ul>
+        </div>
+
+        <!-- Área do chat -->
+        <div class="chat-box">
+            <h3 id="chat-title">Selecione um utilizador</h3>
+            <div id="messages"></div>
+            <form id="message-form">
+                <input type="hidden" id="cliente_id">
+                <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
     </div>
 
-    <h4>Responder a um Cliente</h4>
-    <form action="admin_chat.php" method="POST">
-        <select name="cliente_id" required>
-            <option value="">Escolha o Cliente</option>
-            <?php 
-                $clientes_stmt = $conn->prepare("SELECT DISTINCT cliente_id, u.nome FROM suporte_chat sc JOIN utilizadores u ON sc.cliente_id = u.id_utilizador");
-                $clientes_stmt->execute();
-                $clientes_result = $clientes_stmt->get_result();
-                while ($cliente = $clientes_result->fetch_assoc()):
-            ?>
-                <option value="<?php echo $cliente['cliente_id']; ?>"><?php echo $cliente['nome']; ?></option>
-            <?php endwhile; ?>
-        </select>
-        <input type="text" name="mensagem" placeholder="Digite sua resposta..." required>
-        <button type="submit">Enviar</button>
-    </form>
-
-    <br>
-    <a href="../admin/index.php">Voltar</a>
+    <script src="admin_chat.js"></script>
 </body>
 </html>
 
 <?php
-// Processar resposta do admin
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['mensagem'], $_POST['cliente_id'])) {
-    $mensagem = trim($_POST['mensagem']);
+// Buscar utilizadores
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_users'])) {
+    $stmt = $conn->query("SELECT id_utilizador AS id, nome FROM utilizadores WHERE permissao = 'utilizador'");
+    echo json_encode($stmt->fetch_all(MYSQLI_ASSOC));
+    exit;
+}
+
+// Buscar mensagens
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_messages']) && isset($_GET['cliente_id'])) {
+    $cliente_id = intval($_GET['cliente_id']);
+    $stmt = $conn->prepare("SELECT mensagem, enviado_por, enviado_em FROM suporte_chat WHERE cliente_id = ? ORDER BY enviado_em ASC");
+    $stmt->bind_param("i", $cliente_id);
+    $stmt->execute();
+    echo json_encode($stmt->get_result()->fetch_all(MYSQLI_ASSOC));
+    exit;
+}
+
+// Enviar mensagem
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['cliente_id'])) {
     $cliente_id = intval($_POST['cliente_id']);
+    $mensagem = trim($_POST['mensagem']);
 
     if (!empty($mensagem)) {
         $stmt = $conn->prepare("INSERT INTO suporte_chat (cliente_id, mensagem, enviado_por) VALUES (?, ?, 'admin')");
         $stmt->bind_param("is", $cliente_id, $mensagem);
         $stmt->execute();
-        header("Location: admin_chat.php"); // Atualiza a página após enviar mensagem
-        exit();
     }
+    exit;
 }
 ?>

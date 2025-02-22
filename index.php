@@ -19,8 +19,8 @@ session_start();
 </a>
   <nav class="nav-links">
     <a href="index.php">Início</a>
-    <a href="sobre.php">Sobre Nós</a>
-    <a href="contacto.php">Contactos</a>
+    <a href="./about/sobre.php">Sobre Nós</a>
+    <a href="./about/contactos.php">Contactos</a>
     <a href="consulta.php">Consultar Reserva</a>
   </nav>
 
@@ -73,8 +73,8 @@ session_start();
       <div class="form-group">
         <label for="dropoff-location">Local de Devolução</label>
         <select name="local_devolucao" id="dropoff-location" required>
-          <option value="Lisboa">Lisboa</option>
           <option value="Porto">Porto</option>
+          <option value="Lisboa">Lisboa</option>
           <option value="Faro">Faro</option>
         </select>
       </div>

@@ -10,18 +10,6 @@ if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
-/* function obterTodosOsCarros($conn) {
-    $sql = "SELECT * FROM carros";
-    $result = $conn->query($sql);
-
-    if (!$result) {
-        die("Erro na consulta: " . $conn->error);
-    }
-
-    return $result;
-} */
-
-
 function registarLog($conn, $id_utilizador, $acao, $descricao) {
     $sql = "INSERT INTO logs (id_utilizador, acao, descricao) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);

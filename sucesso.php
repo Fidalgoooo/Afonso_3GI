@@ -42,7 +42,7 @@ try {
         // Status do pagamento
         $status_pagamento = "Concluído";
 
-        // Obter os dados da reserva da sessão
+        // Obter os dados da reserva da sessão 
         if (!isset($_SESSION['dados_reserva']) || empty($_SESSION['dados_reserva'])) {
             die("<p class='error-message'>Erro: Dados da reserva não encontrados. Volte à página de reserva.</p>");
         }
