@@ -20,8 +20,7 @@ session_start();
   <nav class="nav-links">
     <a href="index.php">Início</a>
     <a href="./about/sobre.php">Sobre Nós</a>
-    <a href="./about/contactos.php">Contactos</a>
-    <a href="consulta.php">Consultar Reserva</a>
+    <a href="./about/contacto.php">Contactos</a>
   </nav>
 
   <!-- Verifica se o utilizador está logado -->

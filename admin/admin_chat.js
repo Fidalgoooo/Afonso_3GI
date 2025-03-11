@@ -47,7 +47,7 @@ function loadMessages(cliente_id, nome) {
 
             messages.forEach(msg => {
                 let p = document.createElement("p");
-                p.textContent = msg.enviado_por + " (" + msg.enviado_em + "): " + msg.mensagem;
+                p.textContent = msg.enviado_por + ": " + msg.mensagem + " (" + msg.enviado_em + ")";
                 messageBox.appendChild(p);
             });
         });
