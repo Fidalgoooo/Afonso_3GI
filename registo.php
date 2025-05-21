@@ -24,9 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die("Erro: O email já está registado.");
     } else {
         // Insere o utilizador na base de dados com código de indicação
-        $sql_insert = "INSERT INTO utilizadores (nome, email, password, ) VALUES (?, ?, ?)";
+        $sql_insert = "INSERT INTO utilizadores (nome, email, password) VALUES (?, ?, ?)";
         $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param('ssss', $nome, $email, $password);
+        $stmt_insert->bind_param('sss', $nome, $email, $password);
 
         if ($stmt_insert->execute()) {
             // Obter o email do utilizador inserido

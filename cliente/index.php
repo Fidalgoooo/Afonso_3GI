@@ -67,16 +67,47 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
 </head>
 <body>
     <div class="sidebar">
-        <h2>Menu</h2>
-        <ul>
-            <li onclick="mostrarSecao('reservas')">📅 Minhas Reservas</li>
-            <li onclick="mostrarSecao('perfil')">👤 Editar Perfil</li>
-            <li onclick="mostrarSecao('historico')">📜 Histórico de Reservas</li>
-            <li><a href="chat.php">🎁 Suporte</a></li>
-            <li onclick="mostrarSecao('avaliacoes')">⭐ Avaliações</li>
-            <li><a href="../index.php">🚪 Sair</a></li>
-        </ul>
-    </div>
+    <h2>Menu</h2>
+    <ul>
+        <li onclick="mostrarSecao('reservas')">
+            <span class="menu-item">
+                <span class="icon">📅</span>
+                <span>Minhas Reservas</span>
+            </span>
+        </li>
+        <li onclick="mostrarSecao('perfil')">
+            <span class="menu-item">
+                <span class="icon">👤</span>
+                <span>Editar Perfil</span>
+            </span>
+        </li>
+        <li onclick="mostrarSecao('historico')">
+            <span class="menu-item">
+                <span class="icon">📜</span>
+                <span>Histórico de Reservas</span>
+            </span>
+        </li>
+        <li>
+            <a href="chat.php" class="menu-item">
+                <span class="icon">🎁</span>
+                <span>Suporte</span>
+            </a>
+        </li>
+        <li onclick="mostrarSecao('avaliacoes')">
+            <span class="menu-item">
+                <span class="icon">⭐</span>
+                <span>Avaliações</span>
+            </span>
+        </li>
+        <li>
+            <a href="../index.php" class="menu-item">
+                <span class="icon">📜</span>
+                <span>Sair</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
 
     <div class="content">
         <h2>Bem-vindo, <?php echo htmlspecialchars($utilizador['nome']); ?>!</h2>
@@ -106,12 +137,18 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
 
         <div id="historico" class="secao" style="display: none;">
             <h3>Histórico de Reservas</h3>
-            <ul>
+            
+            <div class="historico-lista">
                 <?php foreach ($historico as $reserva): ?>
-                    <li><?php echo htmlspecialchars($reserva['nome_carro']) . " - " . $reserva['data_inicio'] . " a " . $reserva['data_fim'] . " - " . number_format($reserva['preco_total'], 2, ',', '.') . " €"; ?></li>
+                    <div class="reserva-card">
+                        <h4><?= htmlspecialchars($reserva['nome_carro']) ?></h4>
+                        <p><strong>De:</strong> <?= $reserva['data_inicio'] ?> <strong>até</strong> <?= $reserva['data_fim'] ?></p>
+                        <p><strong>Preço:</strong> <?= number_format($reserva['preco_total'], 2, ',', '.') ?> €</p>
+                    </div>
                 <?php endforeach; ?>
-            </ul>
+            </div>
         </div>
+
 
         <div id="avaliacoes" class="secao" style="display: none;">
             <h3>Deixe uma Avaliação</h3>
