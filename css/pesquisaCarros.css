@@ -129,6 +129,43 @@ a:hover {
 }
 
 
+.resumo-dados-reserva {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  font-family: Arial, sans-serif;
+}
+
+.resumo-dados-reserva h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.resumo-grid label {
+  font-size: 14px;
+  color: #666;
+}
+
+.resumo-grid p {
+  background-color: white;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #222;
+  margin-top: 5px;
+}
+
+
 /* ---------------------------------------------------------------------- */
 
 

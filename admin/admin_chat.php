@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_users'])) {
     exit;
 }
 
-// Buscar mensagens do utilizador selecionado
+// Procurar mensagens do utilizador selecionado
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_messages']) && isset($_GET['cliente_id'])) {
     $cliente_id = intval($_GET['cliente_id']);
     $stmt = $conn->prepare("SELECT mensagem, enviado_por, enviado_em FROM suporte_chat WHERE cliente_id = ? ORDER BY enviado_em ASC");
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['c
 ?>
 
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['c
                 <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
                 <button type="submit">Enviar</button>
             </form>
+        <a href="index.php" class="back-link"> Voltar</a>
         </div>
     </div>
 

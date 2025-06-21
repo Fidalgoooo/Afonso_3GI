@@ -60,11 +60,29 @@ $result = $stmt->get_result();
 </head>
 <body>
 
-    <div class="container">
-        <h1 class="my-4">Carros Disponíveis</h1>
-        <p>Local de retirada: <?= htmlspecialchars($local_retirada ?? 'Não especificado') ?></p>
-        <p>Local de devolução: <?= htmlspecialchars($local_devolucao ?? 'Não especificado') ?></p>
-        <p>Datas: <?= htmlspecialchars($data_retirada ?? 'Não especificada') ?> a <?= htmlspecialchars($data_devolucao ?? 'Não especificada') ?></p>
+    <div class="booking-info">
+        <div class="resumo-dados-reserva">
+        <h2>Resumo da Pesquisa</h2>
+        <div class="resumo-grid">
+            <div>
+            <label><strong>Local de Levantamento:</strong></label>
+            <p><?= htmlspecialchars($local_retirada ?? 'Não especificado') ?></p>
+            </div>
+            <div>
+            <label><strong>Local de Devolução:</strong></label>
+            <p><?= htmlspecialchars($local_devolucao ?? 'Não especificado') ?></p>
+            </div>
+            <div>
+            <label><strong>Data do Levantamento:</strong></label>
+            <p><?= htmlspecialchars($data_retirada ?? 'Não especificada') ?></p>
+            </div>
+            <div>
+            <label><strong>Data de Devolução:</strong></label>
+            <p><?= htmlspecialchars($data_devolucao ?? 'Não especificada') ?></p>
+            </div>
+        </div>
+        </div>
+
         
         <div>
             <?php

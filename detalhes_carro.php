@@ -19,7 +19,8 @@ unset($_SESSION['data_inicio'], $_SESSION['data_fim'], $_SESSION['id_carro'], $_
 // Obter os detalhes do carro a partir do ID
 $id_carro = $_GET['id'] ?? null;
 
-function bool_to_text($value) {
+function bool_to_text($value)
+{
     return $value ? 'Sim' : 'Não';
 }
 
@@ -49,13 +50,15 @@ if ($id_carro) {
 
 
 // Função para verificar a existência da chave e fornecer um valor padrão
-function get_value($array, $key, $default = 'Não especificado') {
+function get_value($array, $key, $default = 'Não especificado')
+{
     return isset($array[$key]) && $array[$key] !== null ? htmlspecialchars($array[$key]) : $default;
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,61 +66,63 @@ function get_value($array, $key, $default = 'Não especificado') {
     <link rel="stylesheet" href="css/detalhe.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <div class="container">
-        <div class="content">
-            <div class="image-container">
-                <img src="<?= get_value($carro, 'imagem', 'img/logo.jpg') ?>" alt="Imagem do carro">
-            </div>
-            <div class="details">
-                <h2>
-                    <?= get_value($carro, 'marca') ?> 
-                    <?php if (!empty(get_value($carro, 'modelo'))) : ?>
-                         <?= get_value($carro, 'modelo') ?>
-                    <?php endif; ?>
-                </h2>
-                <p class="price"><?= get_value($carro, 'preco_dia', '0.00') ?>€ / dia</p>
-                <div class="spec-grid">
-                    <div class="spec-card">
-                        <h3>Caixa de Velocidades</h3>
-                        <span><?= get_value($carro, 'caixa') ?></span>
-                    </div>
-                    <div class="spec-card">
-                        <h3>Combustível</h3>
-                        <span><?= get_value($carro, 'combustivel') ?></span>
-                    </div>
-                    <div class="spec-card">
-                        <h3>Portas</h3>
-                        <span><?= get_value($carro, 'portas') ?></span>
-                    </div>
-                    <div class="spec-card">
-                        <h3>Ar Condicionado</h3>
-                        <span><?= bool_to_text(get_value($carro, 'ar_condicionado')) ?></span>
-                    </div>
-                    <div class="spec-card">
-                        <h3>Assentos</h3>
-                        <span><?= get_value($carro, 'assentos') ?></span>
-                    </div>
-                    <div class="spec-card">
-                        <h3>Kilómetros</h3>
-                        <span><?= get_value($carro, 'distancia', '0') ?> km</span>
-                    </div>
+    <div id="main">
+        <div class="container">
+            <div class="content">
+                <div class="image-container">
+                    <img src="<?= get_value($carro, 'imagem', 'img/logo.jpg') ?>" alt="Imagem do carro">
                 </div>
-                <!-- Passar datas para reserva -->
-                <a href="reserva.php?id=<?= $id_carro ?>&data_retirada=<?= $data_retirada ?>&data_devolucao=<?= $data_devolucao ?>" class="button">Alugar um carro</a>
+                <div class="details">
+                    <h2>
+                        <?= get_value($carro, 'marca') ?>
+                        <?php if (!empty(get_value($carro, 'modelo'))) : ?>
+                            <?= get_value($carro, 'modelo') ?>
+                        <?php endif; ?>
+                    </h2>
+                    <p class="price"><?= get_value($carro, 'preco_dia', '0.00') ?>€ / dia</p>
+                    <div class="spec-grid">
+                        <div class="spec-card">
+                            <h3>Caixa de Velocidades</h3>
+                            <span><?= get_value($carro, 'caixa') ?></span>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Combustível</h3>
+                            <span><?= get_value($carro, 'combustivel') ?></span>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Portas</h3>
+                            <span><?= get_value($carro, 'portas') ?></span>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Ar Condicionado</h3>
+                            <span><?= bool_to_text(get_value($carro, 'ar_condicionado')) ?></span>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Assentos</h3>
+                            <span><?= get_value($carro, 'assentos') ?></span>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Kilómetros</h3>
+                            <span><?= get_value($carro, 'distancia', '0') ?> km</span>
+                        </div>
+                    </div>
+                    <!-- Passar datas para reserva -->
+                    <a href="reserva.php?id=<?= $id_carro ?>&data_retirada=<?= $data_retirada ?>&data_devolucao=<?= $data_devolucao ?>" class="button">Alugar um carro</a>
+                </div>
+            </div>
+            <div class="equipment">
+                <h3>Equipamento Automóvel</h3>
+                <ul>
+                    <li>ABS: <?= bool_to_text(get_value($carro, 'abs')) ?></li>
+                    <li>Airbags: <?= bool_to_text(get_value($carro, 'airbags')) ?></li>
+                    <li>Cruise Controle: <?= bool_to_text(get_value($carro, 'controle_cruzeiro')) ?></li>
+                </ul>
             </div>
         </div>
-        <div class="equipment">
-            <h3>Equipamento Automóvel</h3>
-            <ul>
-                <li>ABS: <?= bool_to_text(get_value($carro, 'abs')) ?></li>
-                <li>Airbags: <?= bool_to_text(get_value($carro, 'airbags')) ?></li>
-                <li>Cruise Controle: <?= bool_to_text(get_value($carro, 'controle_cruzeiro')) ?></li>
-            </ul>
-        </div>
     </div>
-    <div>
-        <?php include './scripts/footer.php'; ?>
-    </div>
+    <?php include './scripts/footer.php'; ?>
 </body>
+
 </html>

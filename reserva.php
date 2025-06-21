@@ -168,26 +168,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit">Próximo</button>
             </form>
 
-        <?php elseif ($etapa === 3): ?>
-            <?php
-            $data_inicio = $_SESSION['data_inicio'];
-            $data_fim = $_SESSION['data_fim'];
-            $dias = (strtotime($data_fim) - strtotime($data_inicio)) / (60 * 60 * 24);
-            $preco_total = $dias * $carro['preco_dia'];
-            ?>
-            <h3>Confirmação da Reserva</h3>
-            <p><strong>Nome:</strong> <?= htmlspecialchars($_SESSION['nome'] ?? 'N/A') ?></p>
-            <p><strong>Email:</strong> <?= htmlspecialchars($_SESSION['email'] ?? 'N/A') ?></p>
-            <p><strong>Contacto:</strong> <?= htmlspecialchars($_SESSION['contacto'] ?? 'N/A') ?></p>
-            <p><strong>Data de Início:</strong> <?= htmlspecialchars($_SESSION['data_inicio'] ?? 'N/A') ?></p>
-            <p><strong>Data de Fim:</strong> <?= htmlspecialchars($_SESSION['data_fim'] ?? 'N/A') ?></p>
-            <p><strong>Método de Pagamento:</strong> PayPal</p>
-            <p><strong>Preço Total:</strong> €<?= number_format($preco_total, 2) ?></p>
+            <?php elseif ($etapa === 3): ?>
+                <?php
+                $data_inicio = $_SESSION['data_inicio'];
+                $data_fim = $_SESSION['data_fim'];
+                $dias = (strtotime($data_fim) - strtotime($data_inicio)) / (60 * 60 * 24);
+                $preco_total = $dias * $carro['preco_dia'];
+                ?>
+                
+                <div class="resumo-pagamento">
+                    <h3>Confirmação da Reserva</h3>
+                    <div class="resumo-grid">
+                        <div><span>Nome:</span><p><?= htmlspecialchars($_SESSION['nome'] ?? 'N/A') ?></p></div>
+                        <div><span>Email:</span><p><?= htmlspecialchars($_SESSION['email'] ?? 'N/A') ?></p></div>
+                        <div><span>Contacto:</span><p><?= htmlspecialchars($_SESSION['contacto'] ?? 'N/A') ?></p></div>
+                        <div><span>Data de Início:</span><p><?= htmlspecialchars($_SESSION['data_inicio'] ?? 'N/A') ?></p></div>
+                        <div><span>Data de Fim:</span><p><?= htmlspecialchars($_SESSION['data_fim'] ?? 'N/A') ?></p></div>
+                        <div><span>Método de Pagamento:</span><p>PayPal</p></div>
+                        <div class="total"><span>Preço Total:</span><p>€<?= number_format($preco_total, 2) ?></p></div>
+                    </div>
 
-            <form method="POST">
-                <button type="submit">Ir para o Pagamento</button>
-            </form>
-        <?php endif; ?>
+                    <form method="POST">
+                        <button type="submit" class="btn-pagamento">Ir para o Pagamento</button>
+                    </form>
+                </div>
+            <?php endif; ?>
     </div>
 
     <!-- Footer -->

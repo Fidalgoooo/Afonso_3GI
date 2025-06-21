@@ -23,8 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare($sql);
             $stmt->bind_param('ss', $new_password, $token);
             $stmt->execute();
-            // <a href='login.php'>Inicie sessão</a>
             $success = "Senha redefinida com sucesso!";
+            header ("Location: index.php");
+            exit;
         } else {
             $error = "Token inválido ou expirado.";
         }

@@ -8,6 +8,74 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.resumo-pagamento {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 700px;
+  margin: 30px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.resumo-pagamento h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.resumo-grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.resumo-grid span {
+  font-weight: 600;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.resumo-grid p {
+  background: #f1f1f1;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  margin: 0;
+}
+
+.resumo-grid .total span,
+.resumo-grid .total p {
+  color: #0a63f0;
+  font-weight: bold;
+}
+
+.btn-pagamento {
+  background: linear-gradient(to right, #00aaff, #0077ff);
+  border: none;
+  padding: 12px 30px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s ease;
+}
+
+.btn-pagamento:hover {
+  background: linear-gradient(to right, #0077ff, #005fcc);
+}
+
 .car-details {
     text-align: center;
     margin-bottom: 20px;
