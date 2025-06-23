@@ -33,10 +33,11 @@ if (!$utilizador) {
 }
 
 // Buscar reservas do utilizador
-$reservas_stmt = $conn->prepare("SELECT r.id_reserva, CONCAT(c.marca, ' ', c.modelo) AS nome_carro, r.data_inicio, r.data_fim, r.preco_total, r.status 
+$reservas_stmt = $conn->prepare("SELECT r.id_reserva, r.codigo_reserva, CONCAT(c.marca, ' ', c.modelo) AS nome_carro, r.data_inicio, r.data_fim, r.preco_total, r.status 
                                 FROM reservas r 
                                 JOIN carros c ON r.id_carro = c.id_carro 
                                 WHERE r.id_utilizador = ? ORDER BY r.data_registo DESC");
+
 
 $reservas_stmt->bind_param("i", $id_utilizador);
 $reservas_stmt->execute();
@@ -85,6 +86,12 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
             <span class="menu-item">
                 <span class="icon">📜</span>
                 <span>Histórico de Reservas</span>
+            </span>
+        </li>
+        <li onclick="mostrarSecao('pagamentos')">
+            <span class="menu-item">
+                <span class="icon">💳</span>
+                <span>Histórico de Pagamentos</span>
             </span>
         </li>
         <li>
@@ -147,6 +154,35 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
                     </div>
                 <?php endforeach; ?>
             </div>
+        </div>
+
+        <div id="pagamentos" class="secao" style="display: none;">
+            <h3>Histórico de Pagamentos</h3>
+            <table>
+                <tr>
+                    <th>Reserva</th>
+                    <th>Período</th>
+                    <th>Valor</th>
+                    <th>Fatura</th>
+                </tr>
+                <?php foreach ($reservas as $reserva): 
+                    $codigo = $reserva['codigo_reserva'];
+                    $pdf_file = '../faturas/fatura_' . $codigo . '.pdf';
+                ?>
+                    <tr>
+                        <td><?= htmlspecialchars($codigo) ?></td>
+                        <td><?= $reserva['data_inicio'] ?> a <?= $reserva['data_fim'] ?></td>
+                        <td><?= number_format($reserva['preco_total'], 2, ',', '.') ?> €</td>
+                        <td>
+                            <?php if (file_exists($pdf_file)): ?>
+                                <a href="<?= $pdf_file ?>" target="_blank">Ver Fatura</a>
+                            <?php else: ?>
+                                Não disponível
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
         </div>
 
 

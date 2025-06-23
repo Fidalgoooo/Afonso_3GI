@@ -140,7 +140,6 @@ echo '<script>
                     <canvas id="gaugeChart"></canvas>
                 </div>
             </div>
-
             <div class="table-section">
     <h2>Reservas</h2>
     <table>

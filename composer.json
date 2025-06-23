@@ -1,5 +1,6 @@
 {
     "require": {
-        "paypal/rest-api-sdk-php": "^1.14"
+        "paypal/rest-api-sdk-php": "^1.14",
+        "dompdf/dompdf": "^3.1"
     }
 }

@@ -49,6 +49,30 @@ try {
 
         $reserva = $_SESSION['dados_reserva'];
 
+        $reserva = $_SESSION['dados_reserva'];
+
+$sql = "SELECT marca, modelo FROM carros WHERE id_carro = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $reserva['id_carro']);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $dados_carro = $result->fetch_assoc();
+    $marca = $dados_carro['marca'];
+    $modelo = $dados_carro['modelo'];
+} else {
+    $marca = "Desconhecido";
+    $modelo = "Desconhecido";
+}
+
+$stmt->close();
+
+// Adicionar ao array da reserva para poderes usar no restante código
+$reserva['marca'] = $marca;
+$reserva['modelo'] = $modelo;
+
+
         // Gerar um código único para a reserva
         do {
             $codigo_reserva = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 6));
@@ -163,6 +187,113 @@ if ($stmt_reserva) {
             } else {
                 echo "<p class='error-message'>Erro ao enviar o e-mail de confirmação.</p>";
             }
+
+            // Gerar o recibo em PDF e enviar no segundo email
+
+require 'vendor/autoload.php';
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+// Configuração do DOMPDF
+$options = new Options();
+$options->set('defaultFont', 'DejaVu Sans');
+$dompdf = new Dompdf($options);
+
+
+// Primeiro convertemos o logotipo em base64
+$logoPath = 'img/logo.jpg';
+$logoData = base64_encode(file_get_contents($logoPath));
+
+// Agora o teu HTML completo com o logótipo embutido
+$html = '
+<style>
+    body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #333333; margin: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header img { width: 120px; margin-bottom: 10px; }
+    .header h2 { color: #0066cc; margin-bottom: 5px; }
+    .header p { font-size: 10px; color: #777777; margin-top: 0; }
+    .section { margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; border: 1px solid #cccccc; }
+    th, td { border: 1px solid #cccccc; padding: 10px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .footer { text-align: center; font-size: 10px; color: #777777; margin-top: 30px; }
+</style>
+
+<div class="header">
+    <img src="data:image/jpeg;base64,'.$logoData.'" alt="SprintCar">
+    <h2>Recibo de Pagamento</h2>
+    <p>Este documento não substitui a fatura oficial. Apenas comprova o pagamento efetuado.</p>
+</div>
+
+<div class="section">
+    <p><b>Data de Emissão:</b> ' . date('d/m/Y') . '</p>
+    <p><b>Código da Reserva:</b> ' . $codigo_reserva . '</p>
+    <p><b>ID da Transação PayPal:</b> ' . $transactionId . '</p>
+</div>
+
+<table>
+    <tr><th>Cliente</th><td>' . htmlspecialchars($reserva['nome']) . '</td></tr>
+    <tr><th>Viatura</th><td>' . htmlspecialchars($reserva['marca']) . ' ' . htmlspecialchars($reserva['modelo']) . '</td></tr>
+    <tr><th>Período da Reserva</th><td>' . $reserva['data_inicio'] . ' a ' . $reserva['data_fim'] . '</td></tr>
+    <tr><th>Valor Total Pago</th><td>' . number_format($total_pago, 2, ',', '.') . ' €</td></tr>
+</table>
+
+<div class="section">
+    <p>Obrigado por confiar na SprintCar. Caso tenha alguma questão, estamos à disposição.</p>
+</div>
+
+<div class="footer">
+    SprintCar &nbsp;|&nbsp; suporte@sprintcar.com &nbsp;|&nbsp; www.sprintcar.com<br>
+</div>
+';
+
+// Gerar o PDF
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'portrait');
+$dompdf->render();
+$pdf = $dompdf->output();
+$fatura_path = 'faturas/fatura_' . $codigo_reserva . '.pdf';
+file_put_contents($fatura_path, $pdf);
+
+$pdf_filename = 'recibo_'.$codigo_reserva.'.pdf';
+file_put_contents($pdf_filename, $pdf);
+
+// Preparar o segundo email com o PDF em anexo
+$subject_recibo = "Recibo da sua reserva - Sprint Car";
+$message_recibo = "Caro(a) {$reserva['nome']},\n\nSegue em anexo o recibo da sua reserva.\n\nObrigado pela sua preferência.";
+
+$separator = md5(time());
+$eol = "\r\n";
+$file_size = filesize($pdf_filename);
+$handle = fopen($pdf_filename, "r");
+$content = fread($handle, $file_size);
+fclose($handle);
+$content = chunk_split(base64_encode($content));
+
+$headers_recibo = "From: no-reply@sprintcar.com" . $eol;
+$headers_recibo .= "MIME-Version: 1.0" . $eol;
+$headers_recibo .= "Content-Type: multipart/mixed; boundary=\"" . $separator . "\"" . $eol;
+
+$body = "--" . $separator . $eol;
+$body .= "Content-Type: text/plain; charset=\"UTF-8\"" . $eol . $eol;
+$body .= $message_recibo . $eol;
+
+$body .= "--" . $separator . $eol;
+$body .= "Content-Type: application/octet-stream; name=\"" . $pdf_filename . "\"" . $eol;
+$body .= "Content-Transfer-Encoding: base64" . $eol;
+$body .= "Content-Disposition: attachment; filename=\"" . $pdf_filename . "\"" . $eol . $eol;
+$body .= $content . $eol;
+$body .= "--" . $separator . "--";
+
+// Enviar o segundo email com o recibo
+if (mail($to, $subject_recibo, $body, $headers_recibo)) {
+    echo "<p class='success-message'>Recibo enviado com sucesso para {$reserva['email']}.</p>";
+} else {
+    echo "<p class='error-message'>Erro ao enviar o recibo.</p>";
+}
+
+// Apagar o ficheiro temporário
+
             ?>
         </div>
         <a href="index.php" class="btn">Voltar à Página Inicial</a>
