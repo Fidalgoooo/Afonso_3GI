@@ -98,8 +98,10 @@ $result = $stmt->get_result();
             while ($carro = $result->fetch_assoc()):
             ?>
             <div class="car-card">
-                <img src="<?php echo $carro['imagem']; ?>" alt="<?php echo $carro['marca'] . ' ' . $carro['modelo']; ?>" class="car-image">
-                <div class="car-details">
+                <img src="admin/<?php echo htmlspecialchars($carro['imagem']); ?>" 
+                alt="<?php echo htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']); ?>" 
+                class="car-image">
+                    <div class="car-details">
                     <h3><?php echo $carro['marca'] . ' ' . $carro['modelo']; ?></h3>
                     <div class="car-info">
                         <ul>

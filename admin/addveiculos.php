@@ -34,7 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $modelo = $_POST['modelo'];
     $ano = intval($_POST['ano']);
     $preco_dia = floatval($_POST['preco_dia']);
-    $imagem = $_POST['imagem'];
+// Diretório onde vais guardar as imagens
+$diretorio_upload = "uploads/";
+if (!is_dir($diretorio_upload)) {
+    mkdir($diretorio_upload, 0755, true);
+}
+
+$imagem = "";
+
+if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
+    $nome_ficheiro = basename($_FILES['imagem']['name']);
+    $caminho_final = $diretorio_upload . time() . "_" . $nome_ficheiro;
+
+    if (move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho_final)) {
+        $imagem = $caminho_final;
+    } else {
+        $error_message = "Erro ao fazer upload da imagem.";
+    }
+} else {
+    $error_message = "Nenhuma imagem foi enviada.";
+}
 
     $combustivel = $_POST['combustivel'];
     $portas = intval($_POST['portas']);
@@ -144,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <p style="color: red;"><?php echo $error_message; ?></p>
             <?php endif; ?>
 
-            <form method="post">
+<form method="post" enctype="multipart/form-data">
             <!-- Dados básicos -->
             <h3>Dados do Veículo</h3>
             <div class="form-group">
@@ -167,10 +186,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <input type="number" id="preco_dia" name="preco_dia" placeholder="Preço/Dia" step="0.01" required>
             </div>
 
-            <div class="form-group">
-                <label for="imagem">URL da Imagem:</label>
-                <input type="text" id="imagem" name="imagem" placeholder="URL da Imagem" required>
-            </div>
+<div class="form-group">
+    <label for="imagem">Selecionar Imagem:</label>
+    <input type="file" id="imagem" name="imagem" accept="image/*" required>
+</div>
+
 
             <!-- Informações do carro -->
             <h3>Informações do Carro</h3>

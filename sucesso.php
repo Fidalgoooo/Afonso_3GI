@@ -255,9 +255,6 @@ $pdf = $dompdf->output();
 $fatura_path = 'faturas/fatura_' . $codigo_reserva . '.pdf';
 file_put_contents($fatura_path, $pdf);
 
-$pdf_filename = 'recibo_'.$codigo_reserva.'.pdf';
-file_put_contents($pdf_filename, $pdf);
-
 // Preparar o segundo email com o PDF em anexo
 $subject_recibo = "Recibo da sua reserva - Sprint Car";
 $message_recibo = "Caro(a) {$reserva['nome']},\n\nSegue em anexo o recibo da sua reserva.\n\nObrigado pela sua preferência.";

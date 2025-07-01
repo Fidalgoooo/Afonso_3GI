@@ -125,7 +125,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <div class="car-details">
             <!-- Detalhes do carro -->
-            <img src="<?= htmlspecialchars($carro['imagem'] ?? 'imagens/default-car.png') ?>" alt="Imagem do carro">
+            <?php
+            $imagem = isset($carro['imagem']) && !empty($carro['imagem']) ? "admin/" . $carro['imagem'] : "imagens/default-car.png";
+            ?>
+            <img src="<?= htmlspecialchars($imagem) ?>" alt="Imagem do carro">
             <h2><?= htmlspecialchars($carro['marca']) ?> - <?= htmlspecialchars($carro['modelo']) ?></h2>
             <p>Preço por dia: €<?= number_format($carro['preco_dia'], 2) ?></p>
         </div>

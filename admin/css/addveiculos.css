@@ -234,3 +234,45 @@ form p.feedback.error {
 
 
 
+
+.image-upload-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.preview-img {
+    max-width: 100px;
+    max-height: 80px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+
+.image-upload-container:hover .preview-img {
+    opacity: 0.6;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: opacity 0.3s ease;
+}
+
+.image-upload-container:hover .overlay {
+    opacity: 1;
+}
+

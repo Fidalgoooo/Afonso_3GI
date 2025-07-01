@@ -23,8 +23,8 @@ session_start();
       </a>
       <nav class="nav-links">
         <a href="index.php">Início</a>
-        <a href="./about/sobre.php">Sobre Nós</a>
-        <a href="./about/contacto.php">Contactos</a>
+        <a href="sobre.php">Sobre Nós</a>
+        <a href="contacto.php">Contactos</a>
       </nav>
 
       <!-- Verifica se o utilizador está logado -->

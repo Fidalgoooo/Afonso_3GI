@@ -72,7 +72,7 @@ function get_value($array, $key, $default = 'Não especificado')
         <div class="container">
             <div class="content">
                 <div class="image-container">
-                    <img src="<?= get_value($carro, 'imagem', 'img/logo.jpg') ?>" alt="Imagem do carro">
+                <img src="admin/<?= get_value($carro, 'imagem', 'img/logo.jpg') ?>" alt="Imagem do carro">
                 </div>
                 <div class="details">
                     <h2>

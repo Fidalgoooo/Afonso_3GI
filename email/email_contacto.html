@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #0044ff, #007bff);
+            color: #fff;
+            text-align: center;
+            padding: 25px;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .body {
+            padding: 25px;
+        }
+
+        .body h1 {
+            font-size: 22px;
+            color: #0044ff;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            background-color: #f9f9f9;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .details p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .details p strong {
+            color: #333;
+        }
+
+        .footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">Nova Mensagem de Contacto</div>
+        <div class="body">
+            <h1>Detalhes da Mensagem</h1>
+            <div class="details">
+                <p><strong>Nome:</strong> {$nome}</p>
+                <p><strong>Email:</strong> {$email}</p>
+                <p><strong>Mensagem:</strong><br>{$mensagem}</p>
+            </div>
+        </div>
+        <div class="footer">
+            &copy; 2025 SprintCar • <a href="mailto:suporte@sprintcar.com">suporte@sprintcar.com</a>
+        </div>
+    </div>
+</body>
+</html>

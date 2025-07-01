@@ -23,10 +23,10 @@ $bookings_result = mysqli_fetch_assoc(mysqli_query($conn, $bookings_query))['tot
 
 // Query para calcular o faturamento do primeiro semestre
 $faturamento_query = "
-    SELECT MONTH(data_registo) AS mes, SUM(preco_total) AS faturamento
+    SELECT MONTH(data_inicio) AS mes, SUM(preco_total) AS faturamento
     FROM reservas
-    WHERE MONTH(data_registo) BETWEEN 1 AND 7 AND YEAR(data_registo) = YEAR(CURDATE())
-    GROUP BY MONTH(data_registo)
+    WHERE MONTH(data_inicio) BETWEEN 1 AND 7 AND YEAR(data_inicio) = 2025
+    GROUP BY MONTH(data_inicio)
 ";
 $faturamento_result = mysqli_query($conn, $faturamento_query);
 
