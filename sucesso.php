@@ -261,24 +261,28 @@ $message_recibo = "Caro(a) {$reserva['nome']},\n\nSegue em anexo o recibo da sua
 
 $separator = md5(time());
 $eol = "\r\n";
-$file_size = filesize($pdf_filename);
-$handle = fopen($pdf_filename, "r");
+
+// Lê o conteúdo do ficheiro PDF
+$file_size = filesize($fatura_path);
+$handle = fopen($fatura_path, "r");
 $content = fread($handle, $file_size);
 fclose($handle);
 $content = chunk_split(base64_encode($content));
 
+// Cabeçalhos do email com anexo
 $headers_recibo = "From: no-reply@sprintcar.com" . $eol;
 $headers_recibo .= "MIME-Version: 1.0" . $eol;
 $headers_recibo .= "Content-Type: multipart/mixed; boundary=\"" . $separator . "\"" . $eol;
 
+// Corpo da mensagem com anexo
 $body = "--" . $separator . $eol;
 $body .= "Content-Type: text/plain; charset=\"UTF-8\"" . $eol . $eol;
 $body .= $message_recibo . $eol;
 
 $body .= "--" . $separator . $eol;
-$body .= "Content-Type: application/octet-stream; name=\"" . $pdf_filename . "\"" . $eol;
+$body .= "Content-Type: application/pdf; name=\"fatura_{$codigo_reserva}.pdf\"" . $eol;
 $body .= "Content-Transfer-Encoding: base64" . $eol;
-$body .= "Content-Disposition: attachment; filename=\"" . $pdf_filename . "\"" . $eol . $eol;
+$body .= "Content-Disposition: attachment; filename=\"fatura_{$codigo_reserva}.pdf\"" . $eol . $eol;
 $body .= $content . $eol;
 $body .= "--" . $separator . "--";
 
@@ -289,14 +293,7 @@ if (mail($to, $subject_recibo, $body, $headers_recibo)) {
     echo "<p class='error-message'>Erro ao enviar o recibo.</p>";
 }
 
-// Apagar o ficheiro temporário
-
-            ?>
-        </div>
-        <a href="index.php" class="btn">Voltar à Página Inicial</a>
-    </div>
-    <?php
-// Limpa variáveis de sessão relacionadas à reserva
+// Limpar variáveis da sessão relacionadas à reserva
 unset(
     $_SESSION['etapa'],
     $_SESSION['id_carro'],
@@ -310,5 +307,8 @@ unset(
     $_SESSION['reserva_sucesso']
 );
 ?>
+        </div>
+        <a href="index.php" class="btn">Voltar à Página Inicial</a>
+    </div>
 </body>
 </html>

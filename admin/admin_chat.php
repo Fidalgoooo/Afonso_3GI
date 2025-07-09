@@ -76,9 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['c
             <form id="message-form">
                 <input type="hidden" id="cliente_id">
                 <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
-                <button type="submit">Enviar</button>
+                <button type="submit" class="chat-button">Enviar</button>
+                <a href="index.php" class="chat-button">Voltar</a>
+
             </form>
-        <a href="index.php" class="back-link"> Voltar</a>
         </div>
     </div>
 

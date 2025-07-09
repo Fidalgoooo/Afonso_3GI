@@ -72,43 +72,31 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
     <ul>
         <li onclick="mostrarSecao('reservas')">
             <span class="menu-item">
-                <span class="icon">📅</span>
                 <span>Minhas Reservas</span>
             </span>
         </li>
         <li onclick="mostrarSecao('perfil')">
             <span class="menu-item">
-                <span class="icon">👤</span>
                 <span>Editar Perfil</span>
             </span>
         </li>
         <li onclick="mostrarSecao('historico')">
             <span class="menu-item">
-                <span class="icon">📜</span>
                 <span>Histórico de Reservas</span>
             </span>
         </li>
         <li onclick="mostrarSecao('pagamentos')">
             <span class="menu-item">
-                <span class="icon">💳</span>
                 <span>Histórico de Pagamentos</span>
             </span>
         </li>
-        <li>
-            <a href="chat.php" class="menu-item">
-                <span class="icon">🎁</span>
-                <span>Suporte</span>
-            </a>
-        </li>
         <li onclick="mostrarSecao('avaliacoes')">
             <span class="menu-item">
-                <span class="icon">⭐</span>
                 <span>Avaliações</span>
             </span>
         </li>
         <li>
             <a href="../index.php" class="menu-item">
-                <span class="icon">📜</span>
                 <span>Sair</span>
             </a>
         </li>
@@ -265,5 +253,6 @@ $historico = $historico_result->fetch_all(MYSQLI_ASSOC);
             </form>
         </div>
     </div>
+    <?php include 'chat_widget.php'; ?>
 </body>
 </html>

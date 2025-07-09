@@ -2,16 +2,38 @@
 session_start();
 include '../db.php';
 
-$cliente_id = $_SESSION['user_id'];
+$cliente_id = $_SESSION['user_id'] ?? null;
+$html = '';
 
-$msg_stmt = $conn->prepare("SELECT * FROM suporte_chat WHERE cliente_id = ? ORDER BY enviado_em ASC");
-$msg_stmt->bind_param("i", $cliente_id);
-$msg_stmt->execute();
-$msg_result = $msg_stmt->get_result();
-$mensagens = $msg_result->fetch_all(MYSQLI_ASSOC);
+if ($cliente_id) {
+    $stmt = $conn->prepare("SELECT * FROM suporte_chat WHERE cliente_id = ? ORDER BY enviado_em ASC");
+    $stmt->bind_param("i", $cliente_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-foreach ($mensagens as $msg) {
-    echo "<p><strong>" . ($msg['enviado_por'] == 'cliente' ? 'Você' : 'Admin') . ":</strong> " . 
-         htmlspecialchars($msg['mensagem']) . " <small>(" . $msg['enviado_em'] . ")</small></p>";
+    while ($row = $result->fetch_assoc()) {
+        $classe = match($row['enviado_por']) {
+            'cliente' => 'mensagem-cliente',
+            'admin'   => 'mensagem-admin',
+            'bot'     => 'mensagem-bot',
+            default   => ''
+        };
+
+        $autor = match($row['enviado_por']) {
+            'cliente' => 'Você',
+            'admin'   => 'Admin',
+            'bot'     => 'Bot',
+            default   => 'Sistema'
+        };
+
+        $mensagem = nl2br(htmlspecialchars($row['mensagem'])); // respeitar \n
+        $html .= "
+            <div class=\"$classe\">
+                <div><strong>$autor:</strong></div>
+                <div>$mensagem</div>
+            </div>
+        ";
+    }
 }
-?>
+
+echo $html;
