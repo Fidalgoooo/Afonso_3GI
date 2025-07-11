@@ -5,6 +5,48 @@
     margin-bottom: 20px;
 }
 
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  z-index: 999;
+  position: relative;
+}
+
+.site-header .logo {
+  height: 40px;
+}
+
+.site-header .nav-links a {
+  margin: 0 10px;
+  color: #333;
+  font-weight: 500;
+}
+
+.site-header .auth-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logout-btn, .login-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.logout-btn:hover, .login-btn:hover {
+  background-color: #0056b3;
+}
+
+
 .card {
     background-color: #f9f9f9;
     padding: 20px;
@@ -93,3 +135,4 @@ canvas {
     background-color: #0056b3; /* Cor de fundo ao passar o rato */
     transform: scale(1.05); /* Efeito de crescimento */
 }
+

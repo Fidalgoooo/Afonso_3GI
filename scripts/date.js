@@ -1,6 +1,6 @@
 // Elementos de data de levantamento e devolução
-const pickupDate = document.getElementById('pickup-date');
-const returnDate = document.getElementById('return-date');
+const pickupDate = document.getElementById('data_retirada');
+const returnDate = document.getElementById('data_devolucao');
 
 // Obter a data atual
 const today = new Date();
@@ -33,3 +33,8 @@ returnDate.addEventListener('change', function () {
     returnDate.value = minDate; // Ajustar para a data mínima geral
   }
 });
+  window.addEventListener('DOMContentLoaded', function () {
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('data_retirada').value = hoje;
+  });
+

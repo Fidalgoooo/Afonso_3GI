@@ -3,26 +3,29 @@ session_start();
 include 'db.php';
 include './scripts/menu.php';
 
-// Recuperar as datas do URL ou da sessão
 $data_retirada = $_GET['data_retirada'] ?? $_SESSION['pesquisa']['data_retirada'] ?? '';
 $data_devolucao = $_GET['data_devolucao'] ?? $_SESSION['pesquisa']['data_devolucao'] ?? '';
 
-// Se as datas existirem no URL, guardá-las na sessão
 if (!empty($data_retirada) && !empty($data_devolucao)) {
-    $_SESSION['pesquisa']['data_retirada'] = $data_retirada;
-    $_SESSION['pesquisa']['data_devolucao'] = $data_devolucao;
+  $_SESSION['pesquisa']['data_retirada'] = $data_retirada;
+  $_SESSION['pesquisa']['data_devolucao'] = $data_devolucao;
 }
 
-// Limpar dados relacionados com reservas ao fazer nova pesquisa
-unset($_SESSION['data_inicio'], $_SESSION['data_fim'], $_SESSION['id_carro'], $_SESSION['nome'], $_SESSION['email'], $_SESSION['contacto'], $_SESSION['metodo_pagamento'], $_SESSION['dados_reserva'], $_SESSION['reserva_sucesso']);
+unset(
+  $_SESSION['data_inicio'],
+  $_SESSION['data_fim'],
+  $_SESSION['id_carro'],
+  $_SESSION['nome'],
+  $_SESSION['email'],
+  $_SESSION['contacto'],
+  $_SESSION['metodo_pagamento'],
+  $_SESSION['dados_reserva'],
+  $_SESSION['reserva_sucesso']
+);
 
-// Obter os dados do formulário
-$local_retirada = $_GET['local_retirada'];
-$local_devolucao = $_GET['local_devolucao'];
-$data_retirada = $_GET['data_retirada'];
-$data_devolucao = $_GET['data_devolucao'];
+$local_retirada = $_GET['local_retirada'] ?? '';
+$local_devolucao = $_GET['local_devolucao'] ?? '';
 
-// Consulta SQL para buscar carros disponíveis
 $sql = "SELECT c.id_carro, c.marca, c.modelo, c.preco_dia, c.imagem, 
                i.combustivel, i.caixa, car.assentos
         FROM carros c
@@ -39,96 +42,78 @@ $sql = "SELECT c.id_carro, c.marca, c.modelo, c.preco_dia, c.imagem,
         )";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
-    "ssssss", 
-    $data_devolucao, $data_retirada, 
-    $data_retirada, $data_devolucao, 
-    $data_retirada, $data_devolucao
+  "ssssss",
+  $data_devolucao, $data_retirada,
+  $data_retirada, $data_devolucao,
+  $data_retirada, $data_devolucao
 );
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carros Disponíveis</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css"> <!-- CSS Geral -->
-    <link rel="stylesheet" href="css/pesquisaCarros.css"> <!-- CSS dos Carros -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aluguer de Carros - Resultados</title>
+<!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"> -->
+<link rel="stylesheet" href="css/pesquisaCarros.css">
+
 </head>
 <body>
+  <div class="container">
+    <div class="reserva-info">
+      <div class="item">
+        <label>Origem</label>
+        <p><?= htmlspecialchars($local_retirada) ?></p>
+      </div>
+      <div class="item">
+        <label>Destino</label>
+        <p><?= htmlspecialchars($local_devolucao) ?></p>
+      </div>
+<div class="item">
+  <label>Data de Recolha</label>
+  <p><?= (new DateTime($data_retirada))->format('d/m/Y') ?></p>
+</div>
+<div class="item">
+  <label>Data de Entrega</label>
+  <p><?= (new DateTime($data_devolucao))->format('d/m/Y') ?></p>
+</div>
 
-    <div class="booking-info">
-        <div class="resumo-dados-reserva">
-        <h2>Resumo da Pesquisa</h2>
-        <div class="resumo-grid">
-            <div>
-            <label><strong>Local de Levantamento:</strong></label>
-            <p><?= htmlspecialchars($local_retirada ?? 'Não especificado') ?></p>
-            </div>
-            <div>
-            <label><strong>Local de Devolução:</strong></label>
-            <p><?= htmlspecialchars($local_devolucao ?? 'Não especificado') ?></p>
-            </div>
-            <div>
-            <label><strong>Data do Levantamento:</strong></label>
-            <p><?= htmlspecialchars($data_retirada ?? 'Não especificada') ?></p>
-            </div>
-            <div>
-            <label><strong>Data de Devolução:</strong></label>
-            <p><?= htmlspecialchars($data_devolucao ?? 'Não especificada') ?></p>
-            </div>
-        </div>
-        </div>
-
-        
-        <div>
-            <?php
-            // Cálculo da diferença de dias entre as datas
-            $data_retirada_obj = new DateTime($data_retirada ?? 'now');
-            $data_devolucao_obj = new DateTime($data_devolucao ?? 'now');
-            $diferenca_dias = $data_retirada_obj->diff($data_devolucao_obj)->days;
-
-            // Garantir pelo menos 1 dia, mesmo que as datas sejam iguais
-            $diferenca_dias = max($diferenca_dias, 1);
-
-            // Loop pelos carros disponíveis
-            while ($carro = $result->fetch_assoc()):
-            ?>
-            <div class="car-card">
-                <img src="admin/<?php echo htmlspecialchars($carro['imagem']); ?>" 
-                alt="<?php echo htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']); ?>" 
-                class="car-image">
-                    <div class="car-details">
-                    <h3><?php echo $carro['marca'] . ' ' . $carro['modelo']; ?></h3>
-                    <div class="car-info">
-                        <ul>
-                            <li><strong>Assentos:</strong> <?php echo $carro['assentos']; ?></li>
-                            <li><strong>Caixa:</strong> <?php echo $carro['caixa']; ?></li>
-                            <li><strong>Combustível:</strong> <?php echo $carro['combustivel']; ?></li>
-                            <ul class="features">
-                                <li class="feature-green">✔ Quilometragem ilimitada</li>
-                                <li class="feature-green">✔ Cancelamento gratuito até 48h antes do levantamento</li>
-                            </ul>
-                        </ul>
-                    </div>
-                </div>
-                <div class="price-section">
-                    <p class="price-label">DESDE</p>
-                    <h2 class="price-per-day"><?php echo number_format($carro['preco_dia'], 2, ',', ' '); ?> € / dia</h2>
-                    <small class="total-price">TOTAL <?php echo number_format($carro['preco_dia'] * $diferenca_dias, 2, ',', ' '); ?> €</small>
-                    <a 
-                        href="detalhes_carro.php?id=<?= $carro['id_carro'] ?>&data_retirada=<?= htmlspecialchars($data_retirada) ?>&data_devolucao=<?= htmlspecialchars($data_devolucao) ?>" 
-                        class="btn-reserve"
-                        aria-label="Reservar <?= htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']) ?>">
-                        Selecione
-                    </a>
-                </div>
-            </div>
-            <?php endwhile; ?>
-        </div>
     </div>
+
+    <?php
+    $data_retirada_obj = new DateTime($data_retirada ?: 'now');
+    $data_devolucao_obj = new DateTime($data_devolucao ?: 'now');
+    $diferenca_dias = $data_retirada_obj->diff($data_devolucao_obj)->days;
+    $diferenca_dias = max($diferenca_dias, 1);
+
+    while ($carro = $result->fetch_assoc()): ?>
+    <div class="car-card">
+      <img src="admin/<?= htmlspecialchars($carro['imagem']) ?>" alt="<?= htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']) ?>" class="car-image">
+      <div class="car-details">
+        <h3><?= htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']) ?></h3>
+        <div class="car-info">
+          <ul>
+            <li><strong>Assentos:</strong> <?= htmlspecialchars($carro['assentos']) ?></li>
+            <li><strong>Caixa:</strong> <?= htmlspecialchars($carro['caixa']) ?></li>
+            <li><strong>Combustível:</strong> <?= htmlspecialchars($carro['combustivel']) ?></li>
+            <ul class="features">
+              <li>✔ Quilometragem ilimitada</li>
+              <li>✔ Cancelamento gratuito até 48h antes do levantamento</li>
+            </ul>
+          </ul>
+        </div>
+      </div>
+      <div class="price-section">
+        <p class="price-label">DESDE</p>
+        <h2><?= number_format($carro['preco_dia'], 2, ',', ' ') ?> € / dia</h2>
+        <small>TOTAL <?= number_format($carro['preco_dia'] * $diferenca_dias, 2, ',', ' ') ?> €</small>
+        <a href="detalhes_carro.php?id=<?= $carro['id_carro'] ?>&data_retirada=<?= urlencode($data_retirada) ?>&data_devolucao=<?= urlencode($data_devolucao) ?>" class="btn-reserve">Selecionar</a>
+      </div>
+    </div>
+    <?php endwhile; ?>
+  </div>
 </body>
 </html>

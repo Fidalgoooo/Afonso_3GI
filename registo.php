@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $message = str_replace('{$nome}', $nome, $message);
                 $message = str_replace('{$email}', $to, $message);
 
-                $headers = "From: no-reply@sprintcar.com\r\n";
+                $headers .= "From: Sprintcar <suporte@sprintcar.com>" . "\r\n";
                 $headers .= "Reply-To: suporte@sprintcar.com\r\n";
                 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 

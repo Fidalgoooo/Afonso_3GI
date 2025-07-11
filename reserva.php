@@ -133,7 +133,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Preço por dia: €<?= number_format($carro['preco_dia'], 2) ?></p>
         </div>
 
-        <!-- Etapas do processo -->
+        <?php
+        // Buscar nome e email do utilizador logado
+        $nome_autenticado = '';
+        $email_autenticado = '';
+
+        if (isset($_SESSION['user_id'])) {
+            if (!isset($_SESSION['nome_cliente']) || !isset($_SESSION['email'])) {
+                $id = $_SESSION['user_id'];
+                $stmt = $conn->prepare("SELECT nome, email FROM utilizadores WHERE id_utilizador = ?");
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $_SESSION['nome_cliente'] = $row['nome'];
+                    $_SESSION['email'] = $row['email'];
+                }
+                $stmt->close();
+            }
+
+            $nome_autenticado = $_SESSION['nome_cliente'] ?? '';
+            $email_autenticado = $_SESSION['email'] ?? '';
+        }
+        ?>
+
         <?php if ($etapa === 1): ?>
             <form method="POST">
                 <h3>Dados da Reserva</h3>
@@ -142,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="row">
                     <div class="form-group">
                         <label for="nome">Nome</label>
-                        <input type="text" name="nome" id="nome" required>
+                        <input type="text" name="nome" id="nome" value="<?= htmlspecialchars($nome_autenticado) ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="contacto">Contacto</label>
@@ -154,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="row">
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" name="email" id="email" required>
+                        <input type="email" name="email" id="email" value="<?= htmlspecialchars($email_autenticado) ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="data_inicio">Data de Início</label>
@@ -171,38 +194,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit">Próximo</button>
             </form>
 
-            <?php elseif ($etapa === 3): ?>
-                <?php
-                $data_inicio = $_SESSION['data_inicio'];
-                $data_fim = $_SESSION['data_fim'];
-                $dias = (strtotime($data_fim) - strtotime($data_inicio)) / (60 * 60 * 24);
-                $preco_total = $dias * $carro['preco_dia'];
-                ?>
-                
-                <div class="resumo-pagamento">
-                    <h3>Confirmação da Reserva</h3>
-                    <div class="resumo-grid">
-                        <div><span>Nome:</span><p><?= htmlspecialchars($_SESSION['nome'] ?? 'N/A') ?></p></div>
-                        <div><span>Email:</span><p><?= htmlspecialchars($_SESSION['email'] ?? 'N/A') ?></p></div>
-                        <div><span>Contacto:</span><p><?= htmlspecialchars($_SESSION['contacto'] ?? 'N/A') ?></p></div>
-                        <div><span>Data de Início:</span><p><?= htmlspecialchars($_SESSION['data_inicio'] ?? 'N/A') ?></p></div>
-                        <div><span>Data de Fim:</span><p><?= htmlspecialchars($_SESSION['data_fim'] ?? 'N/A') ?></p></div>
-                        <div><span>Método de Pagamento:</span><p>PayPal</p></div>
-                        <div class="total"><span>Preço Total:</span><p>€<?= number_format($preco_total, 2) ?></p></div>
+        <?php elseif ($etapa === 3): ?>
+            <?php
+            $data_inicio = $_SESSION['data_inicio'];
+            $data_fim = $_SESSION['data_fim'];
+            $dias = (strtotime($data_fim) - strtotime($data_inicio)) / (60 * 60 * 24);
+            $preco_total = $dias * $carro['preco_dia'];
+            ?>
+
+            <div class="resumo-pagamento">
+                <h3>Confirmação da Reserva</h3>
+                <div class="resumo-grid">
+                    <div><span>Nome:</span><p><?= htmlspecialchars($_SESSION['nome'] ?? 'N/A') ?></p></div>
+                    <div><span>Email:</span><p><?= htmlspecialchars($_SESSION['email'] ?? 'N/A') ?></p></div>
+                    <div><span>Contacto:</span><p><?= htmlspecialchars($_SESSION['contacto'] ?? 'N/A') ?></p></div>
+                    <div><span>Método de Pagamento:</span><p>PayPal</p></div>
+                    <div><span>Data de Início:</span><p><?= htmlspecialchars($_SESSION['data_inicio'] ?? 'N/A') ?></p></div>
+                    <div><span>Data de Fim:</span><p><?= htmlspecialchars($_SESSION['data_fim'] ?? 'N/A') ?></p></div>
+                </div>
+
+                <div class="row" style="width: 100%;">
+                    <div class="total">
+                        <span>Preço Total:</span>
+                        <p>€<?= number_format($preco_total, 2, ',', '.') ?></p>
                     </div>
 
-                    <form method="POST">
-                        <button type="submit" class="btn-pagamento">Ir para o Pagamento</button>
-                    </form>
+                    <style>
+                        .total {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 100%;
+                            background: #f2f2f2;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            font-weight: bold;
+                            color: #007bff;
+                            box-sizing: border-box;
+                            font-size: 16px;
+                        }
+                    </style>
                 </div>
-            <?php endif; ?>
+
+                <form method="POST">
+                    <button type="submit" class="btn-pagamento">Ir para o Pagamento</button>
+                </form>
+            </div>
+        <?php endif; ?>
     </div>
 
     <!-- Footer -->
     <div>
         <?php include './scripts/footer.php'; ?>
     </div>
-
+            <link rel="stylesheet" href="global.css">
 
 </body>
 </html>

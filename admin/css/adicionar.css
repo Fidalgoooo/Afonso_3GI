@@ -1,55 +1,57 @@
-/* Estilo geral do formulário em linha */
 form.adicionar {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espaçamento entre os elementos */
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    gap: 12px;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+    flex-wrap: wrap;
 }
 
-/* Inputs de texto, email, e senha */
+/* Inputs e select */
 form.adicionar input[type="text"],
 form.adicionar input[type="email"],
 form.adicionar input[type="password"],
 form.adicionar select {
-    padding: 10px;
+    padding: 7px 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    min-width: 160px;
+    flex: 1;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-/* Select */
-form.adicionar select {
-    background-color: #fff;
-    cursor: pointer;
-}
-
-/* Botão */
+/* Botão com cor da sidebar */
 form.adicionar button {
-    padding: 10px 15px;
+    padding: 8px 16px;
     background-color: #007bff;
-    color: white;
-    font-size: 1rem;
+    color: #fff;
+    font-size: 0.85rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease-in-out;
 }
 
 form.adicionar button:hover {
-    background-color: #0056b3;
+    background-color: #007bff;
 }
 
-/* Ajustar os inputs para não ocuparem largura total */
-form.adicionar input,
-form.adicionar select {
-    flex: 1; /* Ajusta o tamanho dos elementos para caberem lado a lado */
-}
+/* Responsividade em ecrãs menores */
+@media (max-width: 768px) {
+    form.adicionar {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-form.adicionar button {
-    flex: 0; /* Mantém o tamanho do botão fixo */
+    form.adicionar input,
+    form.adicionar select,
+    form.adicionar button {
+        width: 100%;
+    }
 }

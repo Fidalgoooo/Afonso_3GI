@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = str_replace('{$email}', $email, $message);
     $message = str_replace('{$mensagem}', nl2br($mensagem), $message);
 
-    $headers = "From: $email\r\n";
+    $headers = "From: Sprintcar <suporte@sprintcar.com>\r\n";
     $headers .= "Reply-To: $email\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=UTF-8\r\n";

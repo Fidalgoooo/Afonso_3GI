@@ -2,6 +2,7 @@
 session_start();
 include '../db.php';
 
+
 // Verifica se o utilizador está logado e é administrador
 if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'adm' && $_SESSION['user_permission'] !== 'chiefadmin')) {
     header("Location: ../login.php");
@@ -83,30 +84,28 @@ echo '<script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-    <div class="top-right">
-        <a href="../index.php" class="view-site-btn"><i class="fas fa-eye"></i>Ver Site</a>
-    </div>
+  <div class="container">
+    
+    <!-- Sidebar -->
     <aside class="sidebar">
         <h2>Admin Panel</h2>
-            <ul>
-                <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
-                <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
-                <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
-                <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="admin_chat.php"><i class="fas fa-phone"></i> Chat</a></li>
-
-
-                <!-- Mostrar apenas para ChiefAdmin -->
-                <?php if (isset($_SESSION['user_permission']) && $_SESSION['user_permission'] === 'chiefadmin'): ?>
-                    <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
-                    <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
-                <?php endif; ?>
-
-                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
-            </ul>
+        <ul>
+            <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
+            <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
+            <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
+            <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
+            <li><a href="admin_chat.php"><i class="fas fa-phone"></i> Chat</a></li>
+            <?php if ($_SESSION['user_permission'] === 'chiefadmin'): ?>
+                <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+            <?php endif; ?>
+        </ul>
     </aside>
+
+    <!-- Conteúdo e header à direita -->
+    <div style="flex: 1; display: flex; flex-direction: column;">
+
+      <?php include 'header_admin.php'; ?>
 
         
         <main class="dashboard">
@@ -150,10 +149,8 @@ echo '<script>
                 <th>Contacto</th>
                 <th>Data Início</th>
                 <th>Data Fim</th>
-                <th>Método de Pagamento</th>
                 <th>Veículo</th>
-                <th>Preço Total</th>
-                <th>Data Registo</th>
+                <th>Preço</th>
                 <th>Status</th>
 
             </tr>
@@ -169,18 +166,16 @@ echo '<script>
 
             if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>
-                        <td>{$row['nome']}</td>
-                        <td>{$row['email']}</td>
-                        <td>{$row['contacto']}</td>
-                        <td>{$row['data_inicio']}</td>
-                        <td>{$row['data_fim']}</td>
-                        <td>{$row['metodo_pagamento']}</td>
-                        <td>{$row['marca']} {$row['modelo']}</td>
-                        <td>{$row['preco_total']}</td>
-                        <td>{$row['data_registo']}</td>                        
-                        <td>{$row['status']}</td>
-                    </tr>";
+                echo "<tr>
+                <td>{$row['nome']}</td>
+                <td>{$row['email']}</td>
+                <td>{$row['contacto']}</td>
+                <td>" . date("d/m/Y", strtotime($row['data_inicio'])) . "</td>
+                <td>" . date("d/m/Y", strtotime($row['data_fim'])) . "</td>
+                <td>{$row['marca']} {$row['modelo']}</td>
+                <td>{$row['preco_total']}</td>
+                <td>{$row['status']}</td>
+                </tr>";
                 }
             } else {
                 echo "<tr><td colspan='9'>Nenhuma Reserva</td></tr>";

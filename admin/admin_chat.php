@@ -53,39 +53,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['c
 ?>
 
 
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat de Suporte - Admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Admin Profissional</title>
     <link rel="stylesheet" href="./css/admin_chat.css">
 </head>
 <body>
-    <div class="chat-container">
-        <!-- Barra lateral com lista de utilizadores -->
-        <div class="user-list">
-            <h3>Utilizadores</h3>
-            <ul id="users"></ul>
-        </div>
+  <div class="chat-admin-container">
+    <aside class="chat-sidebar">
+      <h2>Utilizadores</h2>
+      <ul id="users"></ul>
+    </aside>
 
-        <!-- Área do chat -->
-        <div class="chat-box">
-            <h3 id="chat-title">Selecione um utilizador</h3>
-            <div id="messages"></div>
-            <form id="message-form">
-                <input type="hidden" id="cliente_id">
-                <input type="text" id="message-input" placeholder="Digite sua mensagem..." required>
-                <button type="submit" class="chat-button">Enviar</button>
-                <a href="index.php" class="chat-button">Voltar</a>
+    <main class="chat-main">
+      <header class="chat-header">
+        <h3 id="chat-title">Selecione um utilizador</h3>
+      </header>
 
-            </form>
-        </div>
-    </div>
+      <section id="messages" class="chat-messages"></section>
 
-    <script src="admin_chat.js"></script>
+      <form id="message-form" class="chat-form">
+        <input type="hidden" id="cliente_id">
+        <input type="text" id="message-input" placeholder="Digite a sua mensagem..." required>
+        <button type="submit">Enviar</button>
+        <a href="index.php" class="btn-voltar">Voltar</a>
+      </form>
+    </main>
+  </div>
+  <script src="admin_chat.js"></script>
 </body>
 </html>
+
 
 <?php
 // Buscar utilizadores

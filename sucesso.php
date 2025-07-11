@@ -248,13 +248,18 @@ $html = '
 ';
 
 // Gerar o PDF
+// Gerar o PDF
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 $pdf = $dompdf->output();
-$fatura_path = 'faturas/fatura_' . $codigo_reserva . '.pdf';
-file_put_contents($fatura_path, $pdf);
 
+if (!file_exists('faturas')) {
+    mkdir('faturas', 0777, true); // Cria a pasta se não existir
+}
+
+$pdf_filename = 'faturas/fatura_' . $codigo_reserva . '.pdf';
+file_put_contents($pdf_filename, $pdf);
 // Preparar o segundo email com o PDF em anexo
 $subject_recibo = "Recibo da sua reserva - Sprint Car";
 $message_recibo = "Caro(a) {$reserva['nome']},\n\nSegue em anexo o recibo da sua reserva.\n\nObrigado pela sua preferência.";
@@ -263,14 +268,14 @@ $separator = md5(time());
 $eol = "\r\n";
 
 // Lê o conteúdo do ficheiro PDF
-$file_size = filesize($fatura_path);
-$handle = fopen($fatura_path, "r");
+$file_size = filesize($pdf_filename);
+$handle = fopen($pdf_filename, "r");
 $content = fread($handle, $file_size);
 fclose($handle);
 $content = chunk_split(base64_encode($content));
 
 // Cabeçalhos do email com anexo
-$headers_recibo = "From: no-reply@sprintcar.com" . $eol;
+$headers_recibo = "From: Sprintcar suporte@sprintcar.com" . $eol;
 $headers_recibo .= "MIME-Version: 1.0" . $eol;
 $headers_recibo .= "Content-Type: multipart/mixed; boundary=\"" . $separator . "\"" . $eol;
 
@@ -288,7 +293,7 @@ $body .= "--" . $separator . "--";
 
 // Enviar o segundo email com o recibo
 if (mail($to, $subject_recibo, $body, $headers_recibo)) {
-    echo "<p class='success-message'>Recibo enviado com sucesso para {$reserva['email']}.</p>";
+    echo "<p class='success-message'>Recibo enviado com sucesso para {$reserva['email']}</p>";
 } else {
     echo "<p class='error-message'>Erro ao enviar o recibo.</p>";
 }

@@ -98,37 +98,32 @@ $result = $conn->query($sql);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+  <div class="container">
+    
+    <!-- Sidebar -->
     <aside class="sidebar">
         <h2>Admin Panel</h2>
-            <ul>
-                <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
-                <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
-                <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
-                <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
-                <li><a href="admin_chat.php"><i class="fas fa-phone"></i> Chat</a></li>
-
-
-                <!-- Mostrar apenas para ChiefAdmin -->
-                <?php if (isset($_SESSION['user_permission']) && $_SESSION['user_permission'] === 'chiefadmin'): ?>
-                    <li><a href="resets.php"><i class="fas fa-lock"></i> Password Resets</a></li>
-                    <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
-                <?php endif; ?>
-
-                <li><a href="../logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
-            </ul>
+        <ul>
+            <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="utilizadores.php"><i class="fas fa-users"></i> Utilizadores</a></li>
+            <li><a href="condutores.php"><i class="fas fa-id-card"></i> Condutores</a></li>
+            <li><a href="veiculos.php"><i class="fas fa-car"></i> Veículos</a></li>
+            <li><a href="reservas.php"><i class="fas fa-book"></i> Reservas</a></li>
+            <li><a href="admin_chat.php"><i class="fas fa-phone"></i> Chat</a></li>
+            <?php if ($_SESSION['user_permission'] === 'chiefadmin'): ?>
+                <li><a href="logs.php"><i class="fas fa-cogs"></i> Logs</a></li>
+            <?php endif; ?>
+        </ul>
     </aside>
 
+    <!-- Conteúdo e header à direita -->
+    <div style="flex: 1; display: flex; flex-direction: column;">
+
+      <?php include 'header_admin.php'; ?>
+
         <main class="dashboard">
-            <h1>Condutores</h1>
-            <h2>Adicionar Condutor</h2>
-            <form method="post" class="adicionar">
-                <input type="text" name="nome" placeholder="Nome" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="contacto" placeholder="Contacto" required>
-                <button type="submit" name="action" value="adicionar">Adicionar</button>
-            </form>
+            <div class="title-bar">
+                <h1>Condutores</h1>
             <table>
                 <thead>
                     <tr>

@@ -1,5 +1,4 @@
-
-/* Reset básico */
+/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -10,73 +9,193 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background: #f4f6fb;
     color: #333;
-    display: flex;
     line-height: 1.6;
 }
 
-/* Sidebar */
+/* HEADER */
+.header-cliente {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 85px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 2px solid #dfe6e9;
+    z-index: 999;
+}
+
+.logo-cliente {
+    height: 45px;
+}
+
+.user-menu {
+    position: relative;
+}
+
+.user-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.user-icon:hover {
+    transform: scale(1.05);
+}
+
+/* DROPDOWN */
+.dropdown-menu-cliente {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    min-width: 200px;
+    font-size: 14px;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-menu-cliente span {
+    font-weight: bold;
+    color: #1e3a8a;
+    display: block;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.dropdown-menu-cliente a {
+    display: block;
+    color: #2d3436;
+    text-decoration: none;
+    padding: 8px 0;
+    transition: color 0.2s, padding-left 0.2s;
+}
+
+.dropdown-menu-cliente a:hover {
+    color: #1e3a8a;
+    padding-left: 6px;
+}
+
+/* ANIMAÇÃO SUAVE */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* SIDEBAR */
 .sidebar {
     width: 240px;
     background-color: #1e3a8a;
     color: white;
-    height: 100vh;
-    padding: 20px;
+    height: calc(100vh - 85px); /* altura total menos o header */
+    padding: 20px 15px;
     position: fixed;
+    top: 85px; /* começa após o header */
+    left: 0;
+    overflow-y: auto;
+    box-shadow: inset -3px 0 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
 .sidebar h2 {
-    font-size: 22px;
+    font-size: 20px;
     text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #444;
+    margin-bottom: 25px;
+    padding-bottom: 8px;
+    color: #ffffffcc;
+    border-bottom: 1px solid #ffffff22;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .sidebar ul {
     list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
-.sidebar ul li {
-    margin-bottom: 10px;
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    font-size: 15px;
+    font-weight: 500;
     border-radius: 6px;
-    transition: background 0.3s;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.sidebar ul li:hover {
+.sidebar ul li a:hover {
     background-color: #2f3e53;
+    transform: translateX(5px);
+}
+
+.sidebar ul li a.active {
+    background-color: #0c2461;
+    font-weight: bold;
+    border-left: 4px solid #00cec9;
+    padding-left: 11px;
 }
 
 .menu-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 15px;
+    display: block;
+    padding: 10px 15px;
     color: white;
     text-decoration: none;
-}
-
-.menu-item .icon {
-    width: 24px;
-    text-align: center;
-    font-size: 18px;
+    border-radius: 6px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-size: 15px;
+    font-weight: 400;
 }
 
 .menu-item:hover {
     background-color: #2f3e53;
-    border-radius: 6px;
+    transform: translateX(5px);
 }
 
-/* Conteúdo */
+.menu-item.active {
+    background-color: #0c2461;
+    font-weight: bold;
+    border-left: 4px solid #00cec9;
+    padding-left: 11px;
+}
+
+/* CONTENT */
 .content {
+    margin-top: 100px;
     margin-left: 260px;
     padding: 30px;
     width: calc(100% - 260px);
 }
 
 .content h2 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    color: #1e3a8a;
 }
 
+/* PROFILE IMAGE */
 .perfil-img {
     width: 100px;
     height: 100px;
@@ -86,7 +205,7 @@ body {
     border: 3px solid #1e3a8a;
 }
 
-/* Tabela */
+/* TABLES */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -115,70 +234,7 @@ tr:hover {
     background-color: #f2f2f2;
 }
 
-/* Secções */
-.secao {
-    margin-top: 20px;
-}
-
-/* Formulário */
-form {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-form label {
-    font-weight: bold;
-    display: block;
-    color: #333;
-}
-
-form input,
-form select,
-form textarea {
-    width: 100%;
-    background-color: #f9fafb;
-    border: 1px solid #d1d5db;
-    padding: 12px;
-    border-radius: 10px;
-    font-size: 15px;
-    transition: border 0.2s;
-}
-
-form input:focus,
-form select:focus,
-form textarea:focus {
-    border-color: #1e3a8a;
-    outline: none;
-}
-
-form textarea {
-    resize: vertical;
-}
-
-form button {
-    padding: 12px 24px;
-    background-color: #1e3a8a;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-form button:hover {
-    background-color: #2563eb;
-}
-
-/* Histórico em cards */
+/* CARDS */
 .historico-lista {
     display: flex;
     flex-direction: column;
@@ -210,22 +266,86 @@ form button:hover {
     color: #555;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .content {
-        margin-left: 0;
-        width: 100%;
-        padding: 20px;
-    }
+/* FORMS */
+.card-container {
+    background: white;
+    padding: 30px;
+    margin: 30px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    max-width: 900px;
+}
 
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        padding: 15px;
-    }
+.card-container h2 {
+    color: #1e3a8a;
+    margin-bottom: 25px;
+    font-size: 20px;
+}
 
-    form {
-        width: 100%;
-    }
+.form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.edit-profile-form,
+.avaliacao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width {
+    width: 100%;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="file"],
+select,
+textarea {
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #f9fafb;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #2563eb;
+    outline: none;
+    background: #fff;
+}
+
+textarea {
+    min-height: 100px;
+}
+
+button {
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #2563eb;
+}
+
+.secao {
+    margin-top: 20px;
 }

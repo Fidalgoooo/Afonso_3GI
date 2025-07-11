@@ -64,7 +64,7 @@
     <div class="footer-container">
         <div class="footer-contact">
             <a href="mailto:info@sprintcar.com">info@sprintcar.com</a>
-            <a href="tel:+351914667382">+351 914 667 382</a>
+            <a href="tel:+351914667382">+351 912 345 678</a>
         </div>
 
         <div class="footer-description">
@@ -75,7 +75,7 @@
 
         <div class="footer-bottom">
             © 2025 SprintCar. Todos os direitos reservados. <br>
-            <a href="./about/sobre.php">Sobre</a> |
-            <a href="./about/contacto.php">Contacto</a>
+            <a href="sobre.php">Sobre</a> |
+            <a href="contacto.php">Contacto</a>
         </div>
     </div>

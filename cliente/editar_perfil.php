@@ -43,14 +43,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $destino = "../uploads/" . $novo_foto_nome;
 
         if (move_uploaded_file($foto_tmp, $destino)) {
-            // Atualizar a foto de perfil no banco de dados
-            $update_foto_stmt = $conn->prepare("UPDATE utilizadores SET foto_perfil = ? WHERE id_utilizador = ?");
-            $update_foto_stmt->bind_param("si", $novo_foto_nome, $id_utilizador);
-            $update_foto_stmt->execute();
-        } else {
-            echo "Erro ao fazer upload da imagem.";
-            exit();
-        }
+    // Atualizar a foto de perfil no banco de dados
+    $update_foto_stmt = $conn->prepare("UPDATE utilizadores SET foto_perfil = ? WHERE id_utilizador = ?");
+    $update_foto_stmt->bind_param("si", $novo_foto_nome, $id_utilizador);
+    $update_foto_stmt->execute();
+
+    // ✅ Atualizar a sessão com a nova imagem
+    $_SESSION['foto_perfil'] = $novo_foto_nome;
+} else {
+    echo "Erro ao fazer upload da imagem.";
+    exit();
+}
     }
 
     // Atualizar os dados do utilizador

@@ -20,7 +20,7 @@
                     <a href="admin/index.php" class="admin-btn">Dashboard</a>
                 <?php endif; ?>
                 <?php if (isset($_SESSION['user_permission']) && ($_SESSION['user_permission'] === 'utilizador')): ?>
-                    <a href="cliente/index.php" class="admin-btn">Painel</a>
+                    <a href="cliente/index.php" class="admin-btn">Área de Cliente</a>
                 <?php endif; ?>
                 <a href="logout.php" class="logout-btn">Logout</a>
             </div>

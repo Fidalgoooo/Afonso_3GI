@@ -1,191 +1,179 @@
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 
-  footer {
-    margin: 0;
-    padding: 0;
-  }
+footer {
+  margin: 0;
+  padding: 0;
+}
 
-  .container-principal {
-    min-height: 100vh; /* Garante que o conteúdo ocupa a tela inteira */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 425px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
 
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  z-index: 1;
+}
 
-  /* ----------------------------------------------------------------------------- */
+.slide::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5));
+  z-index: 2;
+}
 
-  /* Informative Section */
-  .informative-section {
-    background: linear-gradient(135deg, #007bff, #00d4ff);
-    color: #fff; /* Cor do texto em branco */
-    padding: 40px 20px; /* Espaçamento interior */
-    text-align: center; /* Centraliza o conteúdo */
-  }
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
 
-  .informative-section .informative-content {
-    max-width: 900px; /* Largura máxima para o conteúdo */
-    margin: 0 auto; /* Centraliza o conteúdo horizontalmente */
-  }
+.slide.active {
+  opacity: 1;
+  z-index: 3;
+}
 
-  .informative-section h1 {
-    font-size: 36px; /* Tamanho da fonte para o título */
-    margin-bottom: 20px; /* Espaço abaixo do título */
-    font-weight: bold; /* Negrito */
-  }
+.informative-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  z-index: 4;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  padding: 0 15px;
+}
 
-  .informative-section .benefits-list {
-    list-style: none; /* Remove os marcadores da lista */
-    padding: 0; /* Remove o padding padrão */
-    display: flex; /* Exibe os itens da lista em linha */
-    justify-content: center; /* Alinha os itens ao centro */
-    gap: 20px; /* Espaço entre os itens */
-    flex-wrap: wrap; /* Permite que os itens se movam para a próxima linha em dispositivos pequenos */
-  }
+.informative-overlay h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
 
-  .informative-section .benefits-list li {
-    display: flex; /* Exibe os itens da lista como flex */
-    align-items: center; /* Alinha os itens verticalmente */
-    font-size: 18px; /* Tamanho da fonte */
-  }
+.informative-overlay p {
+  font-size: 1.1rem;
+}
 
-  .informative-section .benefits-list i {
-    color: #ffcc00; /* Cor amarela para o ícone */
-    margin-right: 10px; /* Espaço à direita do ícone */
-    font-size: 22px; /* Tamanho do ícone */
-  }
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 10px;       /* antes: 40px */
+  padding: 20px 10px;     /* antes: 50px */
+  background-color: #f8f9fa;
+}
 
-  /* ----------------------------------------------------------------------------- */
+.features .feature {
+  text-align: center;
+  max-width: 300px;
+  flex: 1;
+  transition: transform 0.3s;
+}
 
-  /* Features Section */
-  .features {
-    display: flex; /* Exibe as características em linha */
-    justify-content: center; /* Centraliza as características horizontalmente */
-    gap: 40px; /* Espaço entre os itens */
-    margin-top: 40px; /* Espaço acima da secção */
-    padding: 50px; /* Padding interno */
-    background-color: #f8f9fa; /* Cor de fundo cinza claro */
-  }
+.features .feature:hover {
+  transform: translateY(-10px);
+}
 
-  .features .feature {
-    text-align: center; /* Centraliza o texto das características */
-    max-width: 300px; /* Largura máxima para cada característica */
-    flex: 1; /* Faz com que cada item ocupe o mesmo espaço */
-    transition: transform 0.3s; /* Transição suave ao passar o mouse */
-  }
+.features img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 15px;
+}
 
-  .features .feature:hover {
-    transform: translateY(-10px); /* Movimenta o item para cima quando o mouse passa sobre ele */
-  }
+.features .feature h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
 
-  .features img {
-    width: 50px; /* Largura das imagens */
-    height: 50px; /* Altura das imagens */
-    margin-bottom: 15px; /* Espaço abaixo da imagem */
-  }
+.features .feature p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
 
-  .features .feature h3 {
-    font-size: 18px; /* Tamanho da fonte do título */
-    margin-bottom: 10px; /* Espaço abaixo do título */
-    color: #333; /* Cor do título */
-  }
+.formulario-reserva-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  background: #f9f9f9;
+}
 
-  .features .feature p {
-    font-size: 14px; /* Tamanho da fonte do texto */
-    color: #666; /* Cor do texto */
-    line-height: 1.5; /* Altura da linha */
-  }
+.formulario-reserva {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+  flex-wrap: wrap;
+}
 
-  /* ----------------------------------------------------------------------------- */
+.formulario-reserva .campo {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', sans-serif;
+  min-width: 150px;
+  white-space: nowrap;
+}
 
-  /* Hero Form Section */
-  /* Estilo para o formulário horizontal */
+.formulario-reserva .campo select,
+.formulario-reserva .campo input[type="date"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
 
-  /* Estiliza o contêiner principal do formulário */
-  .hero-form {
-    display: flex; /* Exibe os elementos como flexbox */
-    flex-wrap: wrap; /* Permite que os itens se movam para a próxima linha */
-    align-items: center; /* Alinha os itens verticalmente */
-    background: #fff; /* Cor de fundo branca */
-    padding: 20px; /* Espaçamento interno */
-    border-radius: 10px; /* Cantos arredondados */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    gap: 15px; /* Espaço entre os itens */
-  }
+.formulario-reserva .label {
+  color: #6699cc;
+  font-weight: 500;
+}
 
-  /* Alinha o conteúdo do formulário */
-  .hero-form {
-      height: 100%; /* Define a altura como 100% */
-      margin: 0; /* Remove margens */
-      display: flex; /* Exibe o formulário como flexbox */
-      justify-content: center; /* Centraliza o conteúdo horizontalmente */
-      align-items: flex-start; /* Mantém o conteúdo no topo da página */
-      font-family: Arial, sans-serif; /* Define a fonte do formulário */
-    }
+.formulario-reserva .divisor {
+  height: 40px;
+  width: 1px;
+  background: #ccc;
+  margin: 0 8px;
+}
 
-  /* Estilo para cada grupo de campo no formulário */
-  .hero-form .form-group {
-    display: flex; /* Exibe os itens como flex */
-    flex-direction: column; /* Organiza os itens em coluna */
-    text-align: center; /* Centraliza o texto */
-  }
+.formulario-reserva .seta {
+  font-size: 20px;
+  color: #bbb;
+}
 
-  /* Estilo para os rótulos dos campos */
-  .hero-form .form-group label {
-    font-size: 0.9rem; /* Tamanho da fonte */
-    font-weight: bold; /* Negrito */
-    margin-bottom: 5px; /* Espaço abaixo do rótulo */
-    color: #333; /* Cor do texto */
-  }
+.btn-pesquisar {
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-  /* Estilo para os campos de entrada (select e input) */
-  .hero-form .form-group select,
-  .hero-form .form-group input {
-    width: 150px; /* Largura dos campos */
-    padding: 10px; /* Espaçamento interno */
-    border: 1px solid #ccc; /* Borda cinza */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-size: 0.9rem; /* Tamanho da fonte */
-  }
+.btn-pesquisar:hover {
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+}
 
-  /* Estilo para o botão */
-  .hero-form button.btn-secondary {
-    padding: 10px 20px; /* Espaçamento interno do botão */
-    background: linear-gradient(135deg, #007bff, #00d4ff);
-    color: #fff; /* Cor do texto branco */
-    border: none; /* Remove a borda */
-    border-radius: 5px; /* Cantos arredondados */
-    font-size: 1rem; /* Tamanho da fonte */
-    font-weight: bold; /* Negrito */
-    cursor: pointer; /* Muda o cursor para indicar que é clicável */
-    transition: 0.3s ease; /* Transição suave ao passar o mouse */
-    align-self: center; /* Centraliza o botão */
-  }
-
-  /* Estilo para o botão ao passar o mouse */
-  .hero-form button.btn-secondary:hover {
-    background: linear-gradient(135deg, #007bff, #00d4ff);
-  }
-
-  /* Ajuste responsivo para telas pequenas */
-  @media (max-width: 768px) {
-    /* Ajuste do formulário em telas pequenas */
-    .hero-form {
-      flex-direction: column; /* Organiza os itens em coluna */
-      align-items: stretch; /* Estica os itens para ocupar a largura total */
-    }
-
-    /* Ajuste dos grupos de campos */
-    .hero-form .form-group {
-      width: 100%; /* Faz os grupos ocuparem 100% da largura */
-    }
-
-    /* Ajuste do botão para ocupar toda a largura */
-    .hero-form button.btn-secondary {
-      width: 100%; /* Faz o botão ocupar 100% da largura */
-    }
-  }
