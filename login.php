@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user['id_utilizador'];
                 $_SESSION['user_name'] = htmlspecialchars($user['nome']);
                 $_SESSION['user_permission'] = $user['permissao'];
+                $_SESSION['foto_perfil'] = $user['foto_perfil'] ?? ''; 
 
                 // Verificar redirecionamento pendente
                 if (isset($_SESSION['redirect_after_login'])) {

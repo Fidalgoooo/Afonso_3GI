@@ -12,7 +12,7 @@ function loadUsers() {
         .then(response => response.json())
         .then(users => {
             const userList = document.getElementById("users");
-            userList.innerHTML = ""; // Limpa a lista antes de adicionar novos utilizadores
+            userList.innerHTML = "";
 
             if (!Array.isArray(users) || users.length === 0) {
                 userList.innerHTML = "<p>Nenhum utilizador encontrado.</p>";
@@ -21,9 +21,16 @@ function loadUsers() {
 
             users.forEach(user => {
                 let li = document.createElement("li");
-                li.textContent = user.nome;
                 li.dataset.id = user.id;
-                li.onclick = () => loadMessages(user.id, user.nome);
+                li.innerHTML = user.nova_msg == 1
+                    ? `${user.nome} <span class="badge-piscar"></span>`
+                    : user.nome;
+                li.onclick = () => {
+                    removerSino(li);
+                    marcarComoVisto(user.id);
+                    loadMessages(user.id, user.nome);
+                };
+
                 userList.appendChild(li);
             });
         })
@@ -38,7 +45,7 @@ function loadMessages(cliente_id, nome) {
         .then(response => response.json())
         .then(messages => {
             const messageBox = document.getElementById("messages");
-            messageBox.innerHTML = ""; // Limpa a área de mensagens antes de carregar novas
+            messageBox.innerHTML = "";
 
             if (!messages.length) {
                 messageBox.innerHTML = "<p>Sem mensagens anteriores.</p>";
@@ -46,10 +53,14 @@ function loadMessages(cliente_id, nome) {
             }
 
             messages.forEach(msg => {
-                let p = document.createElement("p");
-                p.innerHTML = "<strong>" + msg.enviado_por + ":</strong> " + msg.mensagem;
-                messageBox.appendChild(p);
+                const div = document.createElement("div");
+                const tipo = msg.enviado_por.toLowerCase(); // 'cliente', 'bot' ou 'admin'
+                div.className = `message ${tipo}`;
+                div.innerHTML = `<strong>${msg.enviado_por}</strong>${msg.mensagem}`;
+                messageBox.appendChild(div);
             });
+            messageBox.scrollTop = messageBox.scrollHeight;
+
         });
 }
 
@@ -60,10 +71,19 @@ function sendMessage() {
     fetch("admin_chat.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `cliente_id=${cliente_id}&mensagem=${mensagem}`
+        body: `cliente_id=${cliente_id}&mensagem=${encodeURIComponent(mensagem)}`
     })
     .then(() => {
         document.getElementById("message-input").value = "";
         loadMessages(cliente_id, document.getElementById("chat-title").textContent.replace("Chat com ", ""));
     });
+}
+
+function marcarComoVisto(cliente_id) {
+    fetch(`admin_chat.php?marcar_visto=true&cliente_id=${cliente_id}`);
+}
+
+function removerSino(elemento) {
+    const span = elemento.querySelector('.badge-piscar');
+    if (span) span.remove();
 }

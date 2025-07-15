@@ -64,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -72,6 +71,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registo - Aluguer de Carros</title>
     <link rel="stylesheet" href="css/login/registo.css">
+    <style>
+/* Modal escuro de fundo */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+}
+
+/* Conteúdo do modal */
+.modal-conteudo {
+    background-color: #ffffff;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Animação ao abrir */
+@keyframes slideDown {
+    from {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Botão fechar */
+.fechar {
+    color: #555;
+    float: right;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: -10px;
+    margin-right: -10px;
+}
+
+.fechar:hover {
+    color: #e74c3c;
+}
+
+/* Tipografia do modal */
+.modal-conteudo h2 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.modal-conteudo h3 {
+    font-size: 18px;
+    color: #34495e;
+    margin-top: 20px;
+}
+
+.modal-conteudo p {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Checkbox de termos */
+.checkbox-group {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #007bff;
+}
+
+.termos-link {
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.termos-link:hover {
+    color: #0056b3;
+}
+</style>
+
 </head>
 <body>
     <div class="register-container">
@@ -90,12 +190,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="password" class="input-label">Senha</label>
                     <input type="password" id="password" name="password" class="input-field" placeholder="Digite sua senha" required>
                 </div>
+
+                <!-- Checkbox termos -->
+                <div class="input-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="termos" required>
+                        Li e aceito os<span class="termos-link" onclick="abrirModal()">termos e condições</span>
+                    </label>
+                </div>
+
                 <button type="submit" class="btn-submit">Registar</button>
             </form>
+
             <p class="login-link">
                 Já tem uma conta? <a href="login.php">Inicie Sessão</a>
             </p>
-            <!-- Exibe mensagens de sucesso ou erro -->
+
+            <!-- Mensagens -->
             <?php if (isset($error)): ?>
                 <p class="error-message"><?= htmlspecialchars($error) ?></p>
             <?php endif; ?>
@@ -104,6 +215,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endif; ?>
         </div>
     </div>
+
+    <!-- Modal dos Termos e Condições -->
+    <div id="modal-termos" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharModal()">&times;</span>
+            <h2>Termos e Condições</h2>
+            <p>Ao utilizar o nosso serviço, o utilizador concorda com os seguintes termos e condições.</p>
+
+            <h3>1. Condições Gerais</h3>
+            <p>O serviço destina-se a maiores de 18 anos com carta válida.</p>
+
+            <h3>2. Responsabilidade</h3>
+            <p>O utilizador é responsável pela viatura durante o aluguer.</p>
+
+            <h3>3. Pagamento e Cauções</h3>
+            <p>Pagamentos são feitos no ato de reserva. Pode ser exigida caução.</p>
+
+            <h3>4. Cancelamentos</h3>
+            <p>Cancelamentos até 24h antes têm direito a reembolso.</p>
+
+            <h3>5. Privacidade</h3>
+            <p>Os dados são tratados com confidencialidade.</p>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+        function abrirModal() {
+            document.getElementById('modal-termos').style.display = 'block';
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-termos').style.display = 'none';
+        }
+
+        // Fecha se clicar fora do conteúdo
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal-termos');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
-

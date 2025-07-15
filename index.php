@@ -70,7 +70,7 @@ session_start();
 
     <div class="campo">
       <select name="local_retirada" id="origem" required>
-        <option value="" disabled selected hidden>Selecione Origem</option>
+        <option value="" disabled selected hidden>Levantamento</option>
         <option value="Lisboa">Lisboa</option>
         <option value="Porto">Porto</option>
         <option value="Faro">Faro</option>
@@ -81,7 +81,7 @@ session_start();
 
     <div class="campo">
       <select name="local_devolucao" id="destino" required>
-        <option value="" disabled selected hidden>Selecione Destino</option>
+        <option value="" disabled selected hidden>Devolução</option>
         <option value="Lisboa">Lisboa</option>
         <option value="Porto">Porto</option>
         <option value="Faro">Faro</option>

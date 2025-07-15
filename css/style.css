@@ -2,13 +2,13 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6fb;
+    color: #333;
+    /* line-height: 1.6; */
 }
 
 #main {
@@ -16,8 +16,7 @@ body {
 }
 
 /* Header */
-.header,
-.header-cliente {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,16 +30,12 @@ body {
 }
 
 /* Logotipo */
-.logo-container,
-.logo-cliente {
-  display: flex;
-  align-items: center;
+.logo{
+    height: 45px;
 }
 
-.logo-container img,
-.logo-cliente {
+.logo img {
   height: 45px;
-  width: auto;
 }
 
 /* Navegação */
@@ -84,8 +79,8 @@ body {
 }
 
 .user-icon {
-  width: 45px;
-  height: 45px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
@@ -102,14 +97,14 @@ body {
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 60px;
+  top: 70px;
   right: 0;
   background-color: #fff;
   border-radius: 12px;
   padding: 16px 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   z-index: 999;
-  min-width: 180px;
+  min-width: 160px;
   font-size: 14px;
   animation: fadeIn 0.2s ease-in-out;
 }

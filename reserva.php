@@ -204,15 +204,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="resumo-pagamento">
                 <h3>Confirmação da Reserva</h3>
-                <div class="resumo-grid">
-                    <div><span>Nome:</span><p><?= htmlspecialchars($_SESSION['nome'] ?? 'N/A') ?></p></div>
-                    <div><span>Email:</span><p><?= htmlspecialchars($_SESSION['email'] ?? 'N/A') ?></p></div>
-                    <div><span>Contacto:</span><p><?= htmlspecialchars($_SESSION['contacto'] ?? 'N/A') ?></p></div>
-                    <div><span>Método de Pagamento:</span><p>PayPal</p></div>
-                    <div><span>Data de Início:</span><p><?= htmlspecialchars($_SESSION['data_inicio'] ?? 'N/A') ?></p></div>
-                    <div><span>Data de Fim:</span><p><?= htmlspecialchars($_SESSION['data_fim'] ?? 'N/A') ?></p></div>
-                </div>
-
+                    <div class="resumo-grid">
+                        <div><span>Nome:</span><p><?= htmlspecialchars($_SESSION['nome'] ?? 'N/A') ?></p></div>
+                        <div><span>Email:</span><p><?= htmlspecialchars($_SESSION['email'] ?? 'N/A') ?></p></div>
+                        <div><span>Contacto:</span><p><?= htmlspecialchars($_SESSION['contacto'] ?? 'N/A') ?></p></div>
+                        <div><span>Método de Pagamento:</span><p>PayPal</p></div>
+                        <div><span>Data de Início:</span>
+                            <p><?= !empty($_SESSION['data_inicio']) ? htmlspecialchars(date('d/m/Y', strtotime($_SESSION['data_inicio']))) : 'N/A' ?></p>
+                        </div>
+                        <div><span>Data de Fim:</span>
+                            <p><?= !empty($_SESSION['data_fim']) ? htmlspecialchars(date('d/m/Y', strtotime($_SESSION['data_fim']))) : 'N/A' ?></p>
+                        </div>
+                    </div>
                 <div class="row" style="width: 100%;">
                     <div class="total">
                         <span>Preço Total:</span>

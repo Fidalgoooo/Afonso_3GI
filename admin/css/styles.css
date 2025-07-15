@@ -6,9 +6,10 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f9;
-    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6fb;
+    color: #333;
+    line-height: 1.6;
 }
 
 /* Header fixo no topo */
@@ -55,8 +56,8 @@ body {
 .dropdown-menu-admin {
     display: none;
     position: absolute;
-    top: 70px;
-    right: 10px;
+    top: 85px;
+    right: 0;
     background-color: #ffffff;
     border-radius: 12px;
     padding: 16px 20px;
@@ -254,17 +255,19 @@ table select:focus {
 
 /* Botões de Ação nas Tabelas */
 table button {
-    padding: 6px 12px;
-    font-size: 14px;
+    padding: 5px 10px;
+    font-size: 13px;
     color: #ffffff;
     background-color: #3498db;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
+    margin-bottom: 4px; /* Adiciona espaçamento vertical quando empilhados */
 }
 
 table button:hover {
     background-color: #235c83;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);   
 }
+

@@ -57,12 +57,74 @@ $result = $stmt->get_result();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aluguer de Carros - Resultados</title>
-<!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"> -->
-<link rel="stylesheet" href="css/pesquisaCarros.css">
+  <link rel="stylesheet" href="css/pesquisaCarros.css">
+  <style>
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding-top: 20px;
+      text-align: center;
+    }
 
+    .loading-container dotlottie-wc {
+      width: 700px;
+      height: 700px;
+      margin-top: -200px;
+      margin-bottom: -80px; /* aproxima o texto do GIF */
+    }
+
+    .loading-container h2,
+    .loading-container p {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .loading-container h2 {
+      font-size: 1.6rem;
+      animation-delay: 0.3s;
+      margin-bottom: 6px;
+    }
+
+    .loading-container p {
+      font-size: 1rem;
+      animation-delay: 0.6s;
+      color: #555;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #resultados {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+
+  <!-- LOADING -->
+  <div id="loading" class="loading-container">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <dotlottie-wc 
+      src="https://lottie.host/8459d3bb-f293-4e05-bbac-1fced1e4ae1a/BTnXVqpBeo.lottie" 
+      speed="1" 
+      autoplay 
+      loop>
+    </dotlottie-wc>
+
+    <h2>A procura das melhores opções para si<br>com o melhor preço para si</h2>
+    <p>A carregar...</p>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="resultados" class="container">
     <div class="reserva-info">
       <div class="item">
         <label>Origem</label>
@@ -72,15 +134,14 @@ $result = $stmt->get_result();
         <label>Destino</label>
         <p><?= htmlspecialchars($local_devolucao) ?></p>
       </div>
-<div class="item">
-  <label>Data de Recolha</label>
-  <p><?= (new DateTime($data_retirada))->format('d/m/Y') ?></p>
-</div>
-<div class="item">
-  <label>Data de Entrega</label>
-  <p><?= (new DateTime($data_devolucao))->format('d/m/Y') ?></p>
-</div>
-
+      <div class="item">
+        <label>Data de Recolha</label>
+        <p><?= (new DateTime($data_retirada))->format('d/m/Y') ?></p>
+      </div>
+      <div class="item">
+        <label>Data de Entrega</label>
+        <p><?= (new DateTime($data_devolucao))->format('d/m/Y') ?></p>
+      </div>
     </div>
 
     <?php
@@ -90,30 +151,39 @@ $result = $stmt->get_result();
     $diferenca_dias = max($diferenca_dias, 1);
 
     while ($carro = $result->fetch_assoc()): ?>
-    <div class="car-card">
-      <img src="admin/<?= htmlspecialchars($carro['imagem']) ?>" alt="<?= htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']) ?>" class="car-image">
-      <div class="car-details">
-        <h3><?= htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']) ?></h3>
-        <div class="car-info">
-          <ul>
-            <li><strong>Assentos:</strong> <?= htmlspecialchars($carro['assentos']) ?></li>
-            <li><strong>Caixa:</strong> <?= htmlspecialchars($carro['caixa']) ?></li>
-            <li><strong>Combustível:</strong> <?= htmlspecialchars($carro['combustivel']) ?></li>
-            <ul class="features">
-              <li>✔ Quilometragem ilimitada</li>
-              <li>✔ Cancelamento gratuito até 48h antes do levantamento</li>
+      <div class="car-card">
+        <img src="admin/<?= htmlspecialchars($carro['imagem']) ?>" alt="<?= htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']) ?>" class="car-image">
+        <div class="car-details">
+          <h3><?= htmlspecialchars($carro['marca'] . ' ' . $carro['modelo']) ?></h3>
+          <div class="car-info">
+            <ul>
+              <li><strong>Assentos:</strong> <?= htmlspecialchars($carro['assentos']) ?></li>
+              <li><strong>Caixa:</strong> <?= htmlspecialchars($carro['caixa']) ?></li>
+              <li><strong>Combustível:</strong> <?= htmlspecialchars($carro['combustivel']) ?></li>
+              <ul class="features">
+                <li>✔ Quilometragem ilimitada</li>
+                <li>✔ Cancelamento gratuito até 48h antes do levantamento</li>
+              </ul>
             </ul>
-          </ul>
+          </div>
+        </div>
+        <div class="price-section">
+          <p class="price-label">DESDE</p>
+          <h2><?= number_format($carro['preco_dia'], 2, ',', ' ') ?> € / dia</h2>
+          <small>TOTAL <?= number_format($carro['preco_dia'] * $diferenca_dias, 2, ',', ' ') ?> €</small>
+          <a href="detalhes_carro.php?id=<?= $carro['id_carro'] ?>&data_retirada=<?= urlencode($data_retirada) ?>&data_devolucao=<?= urlencode($data_devolucao) ?>" class="btn-reserve">Selecionar</a>
         </div>
       </div>
-      <div class="price-section">
-        <p class="price-label">DESDE</p>
-        <h2><?= number_format($carro['preco_dia'], 2, ',', ' ') ?> € / dia</h2>
-        <small>TOTAL <?= number_format($carro['preco_dia'] * $diferenca_dias, 2, ',', ' ') ?> €</small>
-        <a href="detalhes_carro.php?id=<?= $carro['id_carro'] ?>&data_retirada=<?= urlencode($data_retirada) ?>&data_devolucao=<?= urlencode($data_devolucao) ?>" class="btn-reserve">Selecionar</a>
-      </div>
-    </div>
     <?php endwhile; ?>
   </div>
+
+  <script>
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('resultados').style.display = 'block';
+      }, 5000); // 5 segundos
+    });
+  </script>
 </body>
 </html>

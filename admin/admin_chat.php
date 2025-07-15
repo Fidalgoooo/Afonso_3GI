@@ -8,27 +8,24 @@ if (!isset($_SESSION['user_permission']) || ($_SESSION['user_permission'] !== 'a
     exit;
 }
 
-// Buscar TODOS os utilizadores com permissão 'utilizador'
+// Buscar utilizadores com sino
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_users'])) {
-    $stmt = $conn->query("SELECT id_utilizador AS id, nome FROM utilizadores WHERE permissao = 'utilizador'");
-
-    if (!$stmt) {
-        echo json_encode(["error" => $conn->error]); // Mostra erro no SQL se existir
-        exit;
-    }
-
-    $result = $stmt->fetch_all(MYSQLI_ASSOC);
-
-    if (empty($result)) {
-        echo json_encode(["error" => "Nenhum utilizador encontrado."]); // Caso não existam utilizadores
-        exit;
-    }
-
-    echo json_encode($result);
+    $sql = "
+        SELECT u.id_utilizador AS id, u.nome,
+               EXISTS (
+                   SELECT 1 FROM suporte_chat s
+                   WHERE s.cliente_id = u.id_utilizador AND s.visto_admin = 0
+               ) AS nova_msg
+        FROM utilizadores u
+        WHERE u.permissao = 'utilizador'
+    ";
+    $res = $conn->query($sql);
+    $utilizadores = $res->fetch_all(MYSQLI_ASSOC);
+    echo json_encode($utilizadores);
     exit;
 }
 
-// Procurar mensagens do utilizador selecionado
+// Buscar mensagens
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_messages']) && isset($_GET['cliente_id'])) {
     $cliente_id = intval($_GET['cliente_id']);
     $stmt = $conn->prepare("SELECT mensagem, enviado_por, enviado_em FROM suporte_chat WHERE cliente_id = ? ORDER BY enviado_em ASC");
@@ -38,13 +35,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_messages']) && is
     exit;
 }
 
+// Marcar como visto
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['marcar_visto'], $_GET['cliente_id'])) {
+    $cliente_id = intval($_GET['cliente_id']);
+    $conn->query("UPDATE suporte_chat SET visto_admin = 1 WHERE cliente_id = $cliente_id");
+    exit;
+}
+
 // Enviar mensagem
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['cliente_id'])) {
     $cliente_id = intval($_POST['cliente_id']);
     $mensagem = trim($_POST['mensagem']);
 
     if (!empty($mensagem)) {
-        $stmt = $conn->prepare("INSERT INTO suporte_chat (cliente_id, mensagem, enviado_por) VALUES (?, ?, 'admin')");
+        $stmt = $conn->prepare("INSERT INTO suporte_chat (cliente_id, mensagem, enviado_por, visto_admin) VALUES (?, ?, 'admin', 1)");
         $stmt->bind_param("is", $cliente_id, $mensagem);
         $stmt->execute();
     }
@@ -52,14 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['c
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Admin Profissional</title>
-    <link rel="stylesheet" href="./css/admin_chat.css">
+  <title>Chat Admin</title>
+  <link rel="stylesheet" href="./css/admin_chat.css">
 </head>
 <body>
   <div class="chat-admin-container">
@@ -86,36 +89,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['c
   <script src="admin_chat.js"></script>
 </body>
 </html>
-
-
-<?php
-// Buscar utilizadores
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_users'])) {
-    $stmt = $conn->query("SELECT id_utilizador AS id, nome FROM utilizadores WHERE permissao = 'utilizador'");
-    echo json_encode($stmt->fetch_all(MYSQLI_ASSOC));
-    exit;
-}
-
-// Buscar mensagens
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['fetch_messages']) && isset($_GET['cliente_id'])) {
-    $cliente_id = intval($_GET['cliente_id']);
-    $stmt = $conn->prepare("SELECT mensagem, enviado_por, enviado_em FROM suporte_chat WHERE cliente_id = ? ORDER BY enviado_em ASC");
-    $stmt->bind_param("i", $cliente_id);
-    $stmt->execute();
-    echo json_encode($stmt->get_result()->fetch_all(MYSQLI_ASSOC));
-    exit;
-}
-
-// Enviar mensagem
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mensagem'], $_POST['cliente_id'])) {
-    $cliente_id = intval($_POST['cliente_id']);
-    $mensagem = trim($_POST['mensagem']);
-
-    if (!empty($mensagem)) {
-        $stmt = $conn->prepare("INSERT INTO suporte_chat (cliente_id, mensagem, enviado_por) VALUES (?, ?, 'admin')");
-        $stmt->bind_param("is", $cliente_id, $mensagem);
-        $stmt->execute();
-    }
-    exit;
-}
-?>

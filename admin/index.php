@@ -196,8 +196,7 @@ echo '<script>
         const ocupados = <?php echo $ocupados_result; ?>;
         const disponiveis = <?php echo $disponiveis; ?>;
     </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="../scripts/graficos.js"></script>
-
 </body>
 </html>

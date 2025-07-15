@@ -7,7 +7,23 @@ new Chart(document.getElementById('usersChart'), {
             data: [usersData, driversData, vehiclesData, bookingsData],
             backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#00FF00'],
         }]
-    }
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Distribuição Geral'
+            },
+            datalabels: {
+                color: '#2c3e50',
+                font: {
+                    weight: 'bold'
+                },
+                formatter: (value) => value
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
 });
 
 // Gráfico Gauge
@@ -25,20 +41,32 @@ new Chart(document.getElementById('gaugeChart'), {
         responsive: true,
         cutout: '70%',
         plugins: {
+            title: {
+                display: true,
+                text: 'Estado dos Veículos'
+            },
+            legend: {
+                position: 'bottom'
+            },
             tooltip: {
                 enabled: true
             },
-            legend: {
-                position: 'bottom',
+            datalabels: {
+                color: '#2c3e50',
+                font: {
+                    weight: 'bold'
+                },
+                formatter: (value) => value
             }
         }
-    }
+    },
+    plugins: [ChartDataLabels]
 });
 
-// Configuração do Gráfico
+// Gráfico de Faturamento
 const ctx = document.getElementById('revenueChart').getContext('2d');
 const revenueChart = new Chart(ctx, {
-    type: 'bar', // Gráfico de barras
+    type: 'bar',
     data: {
         labels: mesesSemestre,
         datasets: [{
@@ -49,4 +77,27 @@ const revenueChart = new Chart(ctx, {
             borderWidth: 1
         }]
     },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Faturamento Semestral'
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                color: '#2c3e50',
+                formatter: Math.round,
+                font: {
+                    weight: 'bold'
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
 });
